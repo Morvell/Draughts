@@ -3,7 +3,6 @@ import pygame
 
 import Hahki
 
-
 global i_hb
 global i_hw
 global i_dw

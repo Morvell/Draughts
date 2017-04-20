@@ -119,9 +119,18 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
             without_net()
 
+    font = pygame.font.SysFont("monospace", 50)
+
+    # render text
+    labelWhite = font.render("20", 1, (255, 255, 255))
+    labelBlack = font.render("20", 1, (0, 0, 0))
+
+
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
     rightscreen.blit(i_rightscreen, (0, 0))
+    rightscreen.blit(labelWhite, (70, 30))
+    rightscreen.blit(labelBlack, (70, 120))
     mainscreen.blit(board, (0, 0))
 
     for i in range(10):
