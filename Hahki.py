@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 class Kletka:
     def __init__(self, xpos, ypos, vid='kletka'):
         self.x = xpos
@@ -14,7 +15,6 @@ class Kletka:
 
     def render(self, screen):
         pass
-
 
 class Hahka(Kletka):
     def __init__(self, xpos, ypos, vid, bitmap, side):

@@ -55,7 +55,7 @@ def checkchess(mp, polemass, i, j):
     :param j: 2 индекс в массиве
     :return: True если мышь находится на i и j  позиции или False в противном
     """
-    return (mp[0] > polemass[i][j].x and mp[0] < (polemass[i][j].x + 72) and mp[1] > polemass[i][j].y and mp[1] < (
+    return (polemass[i][j].x < mp[0] < (polemass[i][j].x + 72) and polemass[i][j].y < mp[1] < (
         polemass[i][j].y + 72))
 
 
@@ -110,7 +110,7 @@ def check_enemy(polemass, chess, ipos, jpos):
     return enemymass
 
 
-def startpos(mass, side='down',i_mass=[]):
+def startpos(mass, side='down', i_mass=[]):
     """
     Задает массив доски с шашками
     :param mass: массив в который будут заносится данные
