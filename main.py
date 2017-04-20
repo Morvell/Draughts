@@ -83,8 +83,7 @@ def without_net():
 board = pygame.image.load('pic\Board.gif')
 i_hb = pygame.image.load('pic\HBlack.gif')
 i_hw = pygame.image.load('pic\HWhite.gif')
-i_db = pygame.image.load('pic\DBlack.gif')
-i_dw = pygame.image.load('pic\DWhite.gif')
+
 i_rightscreen = pygame.image.load('pic\\rightscreen.png')
 
 polemass = []
