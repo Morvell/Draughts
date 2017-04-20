@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pygame
+
 import Hahki
 
 
@@ -6,6 +8,9 @@ global i_hb
 global i_hw
 global i_dw
 global i_db
+
+i_db = pygame.image.load('pic\DBlack.gif')
+i_dw = pygame.image.load('pic\DWhite.gif')
 
 def hod_with_enemy(polemass, mass, ipos, jpos, i, j):
     """
@@ -119,8 +124,6 @@ def startpos(mass, side='down', i_mass=[]):
     """
     i_hb = i_mass[0]
     i_hw = i_mass[1]
-    i_db = i_mass[2]
-    i_dw = i_mass[3]
     for i in range(10):
         mass.append([])
         for j in range(10):
