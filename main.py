@@ -120,6 +120,7 @@ game.run()
 
 pygame.font.init()
 font = pygame.font.SysFont("monospace", 50)
+fontLittle = pygame.font.SysFont("monospace", 25)
 
 while done:
     mp = pygame.mouse.get_pos()
@@ -137,14 +138,22 @@ while done:
     # render text
     labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
     labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
-    
+    labalGoChess = font.render("Ходят", 1, (78, 226, 14))
+    labelGoChessWhite = font.render("Белые", 1, (255,255,255))
+    labalGoChessBlack = font.render("Черные", 1, (0,0,0))
+
 
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
     rightscreen.blit(i_rightscreen, (0, 0))
     mainscreen.blit(board, (0, 0))
-    rightscreen.blit(labelWhite, (70, 30))
+    rightscreen.blit(labelWhite, (70, 20))
     rightscreen.blit(labelBlack, (70, 120))
+    rightscreen.blit(labalGoChess, (25, 220))
+    if gochess == "white":
+        rightscreen.blit(labelGoChessWhite, (25, 300))
+    else:
+        rightscreen.blit(labalGoChessBlack, (15, 300))
 
     for i in range(10):
         for j in range(10):
