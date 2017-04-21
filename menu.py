@@ -1,5 +1,3 @@
-import threading
-
 import pygame
 import sys
 
@@ -10,7 +8,7 @@ mainscreen = pygame.Surface((720, 720))
 rightscreen = pygame.Surface((280, 720))
 
 
-class Menu():
+class Menu:
     def __init__(self, punkts=(300, 300, u'start', (123, 235, 34), (34, 25, 66), 1)):
         super().__init__()
         self.i_menu = pygame.image.load('pic\menu.png')
