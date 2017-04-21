@@ -13,12 +13,16 @@ last_kill = "kletka"
 i_db = pygame.image.load('pic\DBlack.gif')
 i_dw = pygame.image.load('pic\DWhite.gif')
 
+
 def how_kill():
+    """
+    функция для распознования цвета последней сбитой шашки
+    :return: цвет сбитой шишки "black" or "white"
+    """
     if last_kill == "black":
         return "black"
     elif last_kill == "white":
         return "white"
-
 
 
 def hod_with_enemy(polemass, mass, ipos, jpos, i, j):
@@ -114,17 +118,15 @@ def check_enemy(polemass, chess, ipos, jpos):
     enemymass = []
     for i in (1, -1):
         for j in (1, -1):
-            if ipos + i <0 or ipos +i>9 or jpos + j<0 or jpos + j > 9:
+            if ipos + i < 0 or ipos + i > 9 or jpos + j < 0 or jpos + j > 9:
                 continue
 
             elif polemass[ipos + i][jpos + j].vid != 'kletka':
                 if polemass[ipos + i][jpos + j].vid != chess.vid:
-                    if ipos + 2*i <0 or ipos +2*i>9 or jpos + 2*j<0 or jpos + 2*j > 9:
+                    if ipos + 2 * i < 0 or ipos + 2 * i > 9 or jpos + 2 * j < 0 or jpos + 2 * j > 9:
                         continue
                     elif polemass[ipos + 2 * i][jpos + 2 * j].vid == 'kletka':
-                        enemymass.append((ipos + 2 * i, jpos + 2 * j, ipos + i, jpos + j,(ipos,jpos)))
-
-
+                        enemymass.append((ipos + 2 * i, jpos + 2 * j, ipos + i, jpos + j, (ipos, jpos)))
 
     return enemymass
 
@@ -183,14 +185,15 @@ def check_chess_with_enemy(mass, gocolor):
     :param gocolor: цвет шашек которыми будут ходить
     :return: массив результатов функции check_enemy()
     """
-    arraychess=[]
+    arraychess = []
     for i in range(10):
         for j in range(10):
             if mass[i][j].vid == 'kletka' or mass[i][j].vid != gocolor:
                 continue
             else:
-                arraychess.append(check_enemy(mass,mass[i][j],i,j))
+                arraychess.append(check_enemy(mass, mass[i][j], i, j))
     return arraychess
+
 
 def check_correct_chess(datamass, corrrectdatamass, chess):
     """
@@ -200,7 +203,7 @@ def check_correct_chess(datamass, corrrectdatamass, chess):
     :param chess: шашка которой будут ходить
     :return: True если можно сходить иначе False
     """
-    fl=True
+    fl = True
     for f in corrrectdatamass:
         if len(f) == 0:
             continue
@@ -210,7 +213,8 @@ def check_correct_chess(datamass, corrrectdatamass, chess):
                 return True
     return fl
 
-def check_correct_damka_hod(chess,poss):
+
+def check_correct_damka_hod(chess, poss):
     """
         проверяет на правельность хода если шашка дамка
         :param chess: данные передвигаемой шашки
@@ -226,7 +230,7 @@ def check_correct_damka_hod(chess,poss):
     return True
 
 
-def set_damka(polemass,i,j):
+def set_damka(polemass, i, j):
     """
         стонавливает шашку дамкой
         :param polemass: массив с данными доски

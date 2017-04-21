@@ -7,7 +7,6 @@ pygame.init()
 numberOfWhite = 20
 numberOfBlack = 20
 
-
 def without_net():
     global continuehod
     global continuehahka
@@ -138,6 +137,7 @@ while done:
     # render text
     labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
     labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
+    
 
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
