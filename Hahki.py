@@ -28,7 +28,7 @@ class Hahka(Kletka):
 
         screen.blit(self.bitmap, (self.x, self.y))
 
-    def updatebitmap(self,newbitmap):
+    def updatebitmap(self, newbitmap):
         self.bitmap = newbitmap
         self.bitmap.set_colorkey((255, 255, 255))
 

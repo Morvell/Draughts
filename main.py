@@ -4,6 +4,10 @@ from menu import *
 
 pygame.init()
 
+numberOfWhite = 20
+numberOfBlack = 20
+
+
 def without_net():
     global continuehod
     global continuehahka
@@ -47,6 +51,12 @@ def without_net():
                     mass = check_enemy(polemass, polemass[ipos][jpos], ipos, jpos)
                     if len(mass) != 0:
                         if hod_with_enemy(polemass, mass, ipos, jpos, i, j):
+                            if how_kill() == "white":
+                                global numberOfWhite
+                                numberOfWhite -= 1
+                            else:
+                                global numberOfBlack
+                                numberOfBlack -= 1
 
                             mouse_button_down_fl = False
                             set_damka(polemass, i, j)
@@ -109,6 +119,9 @@ punkts = [(400, 200, u'Start', (123, 15, 34), (235, 75, 156), 0),
 game = Menu(punkts)
 game.run()
 
+pygame.font.init()
+font = pygame.font.SysFont("monospace", 50)
+
 while done:
     mp = pygame.mouse.get_pos()
 
@@ -116,13 +129,22 @@ while done:
 
         if e.type == pygame.QUIT:
             done = False
+
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
             without_net()
+
+
+
+    # render text
+    labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
+    labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
 
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
     rightscreen.blit(i_rightscreen, (0, 0))
     mainscreen.blit(board, (0, 0))
+    rightscreen.blit(labelWhite, (70, 30))
+    rightscreen.blit(labelBlack, (70, 120))
 
     for i in range(10):
         for j in range(10):
@@ -132,6 +154,6 @@ while done:
                 print("AttributeError check render")
             except Exception as e:
                 print(e)
-                # print(str(i) + " " + str(j))
+                print(str(i) + " " + str(j))
 
     pygame.display.flip()
