@@ -8,8 +8,18 @@ global i_hw
 global i_dw
 global i_db
 
+last_kill = "kletka"
+
 i_db = pygame.image.load('pic\DBlack.gif')
 i_dw = pygame.image.load('pic\DWhite.gif')
+
+def how_kill():
+    if last_kill == "black":
+        return "black"
+    elif last_kill == "white":
+        return "white"
+
+
 
 def hod_with_enemy(polemass, mass, ipos, jpos, i, j):
     """
@@ -22,11 +32,16 @@ def hod_with_enemy(polemass, mass, ipos, jpos, i, j):
     :param j: 2 индекс куда пойдем
     :return: True если ход осуществим иначе False
     """
-
     for e in mass:
         if polemass[e[0]][e[1]] == polemass[i][j]:
             hod(polemass, ipos, jpos, i, j)
             kletka = Hahki.Kletka(polemass[e[2]][e[3]].x, polemass[e[2]][e[3]].y, 'kletka')
+            vid = polemass[e[2]][e[3]].vid
+            if vid == "white":
+                global last_kill
+                last_kill = "white"
+            else:
+                last_kill = "black"
             polemass[e[2]][e[3]] = kletka
             return True
 
@@ -196,6 +211,12 @@ def check_correct_chess(datamass, corrrectdatamass, chess):
     return fl
 
 def check_correct_damka_hod(chess,poss):
+    """
+        проверяет на правельность хода если шашка дамка
+        :param chess: данные передвигаемой шашки
+        :param poss: данные клетки на которую юудет поизводится движение
+        :return True если можно сходить иначе False
+    """
     if chess.x != poss.x - 72 and chess.x != poss.x + 72:
         return False
 
@@ -206,6 +227,13 @@ def check_correct_damka_hod(chess,poss):
 
 
 def set_damka(polemass,i,j):
+    """
+        стонавливает шашку дамкой
+        :param polemass: массив с данными доски
+        :param i: первый индекс меняемой шашки в массиве polemass
+        :param j: второй индекс меняемой шашки в массиве polemass
+        :return: ничего
+        """
     if i == 0 or i == 9:
         polemass[i][j].damka = True
         if polemass[i][j].vid == 'black':
