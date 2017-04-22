@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import endMenu
 from Hahkiapi import *
 from menu import *
 
@@ -92,8 +93,9 @@ def without_net():
 board = pygame.image.load('pic\Board.gif')
 i_hb = pygame.image.load('pic\HBlack.gif')
 i_hw = pygame.image.load('pic\HWhite.gif')
+i_menu = pygame.image.load('pic\menu.png')
 
-i_rightscreen = pygame.image.load('pic\\rightscreen.png')
+i_rightscreen = pygame.image.load('pic/rightscreen.png')
 
 polemass = []
 
@@ -123,6 +125,25 @@ font = pygame.font.SysFont("monospace", 50)
 fontLittle = pygame.font.SysFont("monospace", 25)
 
 while done:
+    print(str(numberOfWhite) + "|" + str(numberOfBlack))
+    if numberOfBlack == 0 or numberOfWhite == 0:
+        endMenu = endMenu.EndMenu()
+        ishod = None
+        if numberOfWhite == 0:
+            if playerchess == "white":
+                ishod = "lose"
+            else:
+                ishod = "win"
+        elif numberOfBlack == 0:
+            if playerchess == "white":
+                ishod = "win"
+            else:
+                ishod = "lose"
+        endMenu.run(ishod)
+
+
+
+
     mp = pygame.mouse.get_pos()
 
     for e in pygame.event.get():
@@ -139,9 +160,8 @@ while done:
     labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
     labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
     labalGoChess = font.render("Ходят", 1, (78, 226, 14))
-    labelGoChessWhite = font.render("Белые", 1, (255,255,255))
-    labalGoChessBlack = font.render("Черные", 1, (0,0,0))
-
+    labelWhiteChess = font.render("Белые", 1, (255, 255, 255))
+    labalBlackChess = font.render("Черные", 1, (0, 0, 0))
 
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
@@ -151,9 +171,9 @@ while done:
     rightscreen.blit(labelBlack, (70, 120))
     rightscreen.blit(labalGoChess, (25, 220))
     if gochess == "white":
-        rightscreen.blit(labelGoChessWhite, (25, 300))
+        rightscreen.blit(labelWhiteChess, (25, 300))
     else:
-        rightscreen.blit(labalGoChessBlack, (15, 300))
+        rightscreen.blit(labalBlackChess, (15, 300))
 
     for i in range(10):
         for j in range(10):
