@@ -19,7 +19,7 @@ class EndMenu:
         super().__init__()
         self.i_menu = pygame.image.load('pic\menu.png')
         self.i_rmenu = pygame.image.load('pic\menurightscreen.png')
-
+       
 
     def run(self, ishod):
         done = True
@@ -29,6 +29,12 @@ class EndMenu:
             label = labelLose
 
         while done:
+
+            for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    sys.exit()
+
+
             window.blit(mainscreen, (0, 0))
             window.blit(rightscreen, (720, 0))
             mainscreen.blit(self.i_menu, (0, 0))
