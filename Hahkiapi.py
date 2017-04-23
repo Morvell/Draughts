@@ -5,6 +5,8 @@ import Hahki
 
 last_kill = "kletka"
 
+lengthOrWidth = 72
+
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
 
@@ -73,8 +75,8 @@ def checkchess(mp, polemass, i, j):
     :param j: 2 индекс в массиве
     :return: True если мышь находится на i и j  позиции или False в противном
     """
-    return (polemass[i][j].x < mp[0] < (polemass[i][j].x + 72) and polemass[i][j].y < mp[1] < (
-        polemass[i][j].y + 72))
+    return (polemass[i][j].x < mp[0] < (polemass[i][j].x + lengthOrWidth) and polemass[i][j].y < mp[1] <
+            (polemass[i][j].y + lengthOrWidth))
 
 
 def check_hod_without_enemy(chess, poss):
@@ -85,16 +87,16 @@ def check_hod_without_enemy(chess, poss):
     :return: True если на это поле можно сходить или False если нет
     """
 
-    if chess.x != poss.x - 72 and chess.x != poss.x + 72:
+    if chess.x != poss.x - lengthOrWidth and chess.x != poss.x + lengthOrWidth:
         return False
 
     elif chess.side == 'down':
-        if chess.y != poss.y + 72:
+        if chess.y != poss.y + lengthOrWidth:
             return False
         else:
             return True
     elif chess.side == 'up':
-        if chess.y != poss.y - 72:
+        if chess.y != poss.y - lengthOrWidth:
             return False
         else:
             return True
@@ -142,35 +144,35 @@ def startpos(mass, side='down', i_mass=[]):
     if side == 'down':
         for i in (0, 2):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'black', i_hb, 'up')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
         for i in (1, 3):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'black', i_hb, 'up')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
         for i in (6, 8):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'white', i_hw, 'down')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
         for i in (7, 9):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'white', i_hw, 'down')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
 
     elif side == 'up':
         for i in (0, 2):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'white', i_hw, 'up')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
         for i in (1, 3):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'white', i_hw, 'up')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
         for i in (6, 8):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'black', i_hb, 'down')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
         for i in (7, 9):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(72 * j, 72 * i, 'black', i_hb, 'down')
+                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
 
     for i in range(10):
         for j in range(10):
             if type(mass[i][j]) == list:
-                mass[i][j] = Hahki.Kletka(72 * j, 72 * i)
+                mass[i][j] = Hahki.Kletka(lengthOrWidth * j, lengthOrWidth * i)
 
 
 def check_chess_with_enemy(mass, gocolor):
@@ -216,11 +218,11 @@ def check_correct_damka_hod(chess, poss):
         :param poss: данные клетки на которую юудет поизводится движение
         :return True если можно сходить иначе False
     """
-    if chess.x != poss.x - 72 and chess.x != poss.x + 72:
+    if chess.x != poss.x - lengthOrWidth and chess.x != poss.x + lengthOrWidth:
         return False
 
     elif chess.side == 'down':
-        if chess.y != poss.y + 72 and chess.y != poss.y - 72:
+        if chess.y != poss.y + lengthOrWidth and chess.y != poss.y - lengthOrWidth:
             return False
     return True
 
