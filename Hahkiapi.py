@@ -3,15 +3,10 @@ import pygame
 
 import Hahki
 
-global i_hb
-global i_hw
-global i_dw
-global i_db
-
 last_kill = "kletka"
 
-i_db = pygame.image.load('pic\DBlack.gif')
-i_dw = pygame.image.load('pic\DWhite.gif')
+i_db = pygame.image.load('pic/DBlack.gif')
+i_dw = pygame.image.load('pic/DWhite.gif')
 
 
 def how_kill():

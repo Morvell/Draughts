@@ -90,10 +90,10 @@ def without_net():
                         break
 
 
-board = pygame.image.load('pic\Board.gif')
-i_hb = pygame.image.load('pic\HBlack.gif')
-i_hw = pygame.image.load('pic\HWhite.gif')
-i_menu = pygame.image.load('pic\menu.png')
+board = pygame.image.load('pic/Board.gif')
+i_hb = pygame.image.load('pic/HBlack.gif')
+i_hw = pygame.image.load('pic/HWhite.gif')
+i_menu = pygame.image.load('pic/menu.png')
 
 i_rightscreen = pygame.image.load('pic/rightscreen.png')
 
