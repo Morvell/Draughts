@@ -6,7 +6,12 @@ import Hahki
 numberOfWhite = 20
 numberOfBlack = 20
 
+font = pygame.font.SysFont("monospace", 50)
+
 last_kill = "kletka"
+
+labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
+labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
 
 side = 'down'
 playerchess = 'black'
@@ -16,6 +21,21 @@ lengthOrWidth = 72
 
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
+
+def changeNumberRender(surface):
+    surface.blit(labelWhite, (70, 20))
+    surface.blit(labelBlack, (70, 120))
+
+def changeNumber():
+    global numberOfBlack, numberOfWhite
+    if how_kill() == "white":
+        numberOfWhite -= 1
+    else:
+        numberOfBlack -= 1
+    global labelBlack, labelWhite
+    labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
+    labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
+    print(str(numberOfWhite) + "|" + str(numberOfBlack))
 
 def endGame():
     ishod = False

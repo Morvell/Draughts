@@ -6,7 +6,6 @@ from menu import *
 pygame.init()
 
 
-
 def without_net():
     global continuehod
     global continuehahka
@@ -50,12 +49,7 @@ def without_net():
                     mass = check_enemy(polemass, polemass[ipos][jpos], ipos, jpos)
                     if len(mass) != 0:
                         if hod_with_enemy(polemass, mass, ipos, jpos, i, j):
-                            if how_kill() == "white":
-                                global numberOfWhite
-                                numberOfWhite -= 1
-                            else:
-                                global numberOfBlack
-                                numberOfBlack -= 1
+                            changeNumber()
 
                             mouse_button_down_fl = False
                             set_damka(polemass, i, j)
@@ -122,15 +116,12 @@ font = pygame.font.SysFont("monospace", 50)
 fontLittle = pygame.font.SysFont("monospace", 25)
 
 while done:
-    print(str(numberOfWhite) + "|" + str(numberOfBlack))
+
     if numberOfBlack == 0 or numberOfWhite == 0:
         endgame = endGame()
         if endgame:
             endMenu = endMenu.EndMenu()
             endMenu.run(endgame)
-
-
-
 
     mp = pygame.mouse.get_pos()
 
@@ -142,11 +133,8 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
             without_net()
 
-
-
     # render text
-    labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
-    labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
+
     labalGoChess = font.render("Ходят", 1, (78, 226, 14))
     labelWhiteChess = font.render("Белые", 1, (255, 255, 255))
     labalBlackChess = font.render("Черные", 1, (0, 0, 0))
@@ -155,8 +143,7 @@ while done:
     window.blit(rightscreen, (720, 0))
     rightscreen.blit(i_rightscreen, (0, 0))
     mainscreen.blit(board, (0, 0))
-    rightscreen.blit(labelWhite, (70, 20))
-    rightscreen.blit(labelBlack, (70, 120))
+    changeNumberRender(rightscreen)
     rightscreen.blit(labalGoChess, (25, 220))
     if gochess == "white":
         rightscreen.blit(labelWhiteChess, (25, 300))
