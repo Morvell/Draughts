@@ -108,7 +108,7 @@ def without_net(mp):
                                         j].vid == 'kletka':
                         print('in True')
                         mouse_button_down_fl = False
-                        hod(polemass, ipos, jpos, i, j)
+                        hod(ipos, jpos, i, j)
                         set_damka(polemass, i, j)
                         if gochess == 'white':
                             gochess = 'black'
@@ -159,7 +159,6 @@ def how_kill():
 def hod_with_enemy(mass, ipos, jpos, i, j):
     """
     реализует ход через врага
-    :param polemass: массив данных доски
     :param mass: массив с потенциальными врагами полученный вызовом функции check_enemy
     :param ipos: 1 индекс чем ходить
     :param jpos: 2 индекс чем ходить
@@ -169,7 +168,7 @@ def hod_with_enemy(mass, ipos, jpos, i, j):
     """
     for e in mass:
         if polemass[e[0]][e[1]] == polemass[i][j]:
-            hod(polemass, ipos, jpos, i, j)
+            hod(ipos, jpos, i, j)
             kletka = Hahki.Kletka(polemass[e[2]][e[3]].x, polemass[e[2]][e[3]].y, 'kletka')
             vid = polemass[e[2]][e[3]].vid
             if vid == "white":
@@ -183,10 +182,9 @@ def hod_with_enemy(mass, ipos, jpos, i, j):
     return False
 
 
-def hod(polemass, ipos, jpos, i, j):
+def hod(ipos, jpos, i, j):
     """
     производит простой ход пешки
-    :param polemass: массив двнных о доске
     :param ipos: начальная позиция 1
     :param jpos: начальная позиция 2
     :param i: куда ходит 1
