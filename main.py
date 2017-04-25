@@ -5,10 +5,6 @@ from menu import *
 
 pygame.init()
 
-
-
-
-
 board = pygame.image.load('pic/Board.gif')
 i_hb = pygame.image.load('pic/HBlack.gif')
 i_hw = pygame.image.load('pic/HWhite.gif')
@@ -57,7 +53,7 @@ while done:
     # render text
 
     labalGoChess = font.render("Ходят", 1, (78, 226, 14))
-    
+
 
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))

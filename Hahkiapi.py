@@ -82,7 +82,7 @@ def without_net(mp):
                 elif mouse_button_down_fl == True and gochess != polemass[i][j].vid:
                     mass = check_enemy(polemass, polemass[ipos][jpos], ipos, jpos)
                     if len(mass) != 0:
-                        if hod_with_enemy(polemass, mass, ipos, jpos, i, j):
+                        if hod_with_enemy(mass, ipos, jpos, i, j):
                             changeNumber()
 
                             mouse_button_down_fl = False
@@ -156,7 +156,7 @@ def how_kill():
         return "white"
 
 
-def hod_with_enemy(polemass, mass, ipos, jpos, i, j):
+def hod_with_enemy(mass, ipos, jpos, i, j):
     """
     реализует ход через врага
     :param polemass: массив данных доски
