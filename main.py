@@ -5,8 +5,7 @@ from menu import *
 
 pygame.init()
 
-numberOfWhite = 20
-numberOfBlack = 20
+
 
 def without_net():
     global continuehod
@@ -101,9 +100,7 @@ polemass = []
 
 # Блок выбора цвета и стороны шашек
 # side - сторона на которой будут находится белые шашки down или up
-side = 'down'
-playerchess = 'black'
-gochess = 'white'
+
 
 startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
 done = True
@@ -127,19 +124,10 @@ fontLittle = pygame.font.SysFont("monospace", 25)
 while done:
     print(str(numberOfWhite) + "|" + str(numberOfBlack))
     if numberOfBlack == 0 or numberOfWhite == 0:
-        endMenu = endMenu.EndMenu()
-        ishod = None
-        if numberOfWhite == 0:
-            if playerchess == "white":
-                ishod = "lose"
-            else:
-                ishod = "win"
-        elif numberOfBlack == 0:
-            if playerchess == "white":
-                ishod = "win"
-            else:
-                ishod = "lose"
-        endMenu.run(ishod)
+        endgame = endGame()
+        if endgame:
+            endMenu = endMenu.EndMenu()
+            endMenu.run(endgame)
 
 
 

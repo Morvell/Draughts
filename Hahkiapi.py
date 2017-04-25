@@ -3,13 +3,33 @@ import pygame
 
 import Hahki
 
+numberOfWhite = 20
+numberOfBlack = 20
+
 last_kill = "kletka"
+
+side = 'down'
+playerchess = 'black'
+gochess = 'white'
 
 lengthOrWidth = 72
 
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
 
+def endGame():
+    ishod = False
+    if numberOfWhite == 0:
+        if playerchess == "white":
+            ishod = "lose"
+        else:
+            ishod = "win"
+    elif numberOfBlack == 0:
+        if playerchess == "white":
+            ishod = "win"
+        else:
+            ishod = "lose"
+    return ishod
 
 def how_kill():
     """
