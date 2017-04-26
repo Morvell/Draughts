@@ -34,13 +34,23 @@ lengthOrWidth = 72
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
 
+
 def whoGo(surface):
+    """
+    Отображает кто должен ходить
+    :param surface: поверхнотсь для отображения 
+    """
     if gochess == "white":
         surface.blit(labelWhiteChess, (25, 300))
     else:
         surface.blit(labalBlackChess, (15, 300))
 
+
 def without_net(mp):
+    """
+    Основная логика программы
+    :param mp: координаты мышки
+    """
     global continuehod
     global continuehahka
     global mouse_button_down_fl
@@ -116,11 +126,20 @@ def without_net(mp):
                             gochess = 'white'
                         break
 
+
 def changeNumberRender(surface):
+    """
+    Отображает количество шшашек на поле
+    :param surface: поверхность для отображения
+    """
     surface.blit(labelWhite, (70, 20))
     surface.blit(labelBlack, (70, 120))
 
+
 def changeNumber():
+    """
+    Изменяет количество шашек на игровом столе
+    """
     global numberOfBlack, numberOfWhite
     if how_kill() == "white":
         numberOfWhite -= 1
@@ -131,19 +150,39 @@ def changeNumber():
     labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
     print(str(numberOfWhite) + "|" + str(numberOfBlack))
 
+
 def endGame():
+    """
+    Проверка на конец игры
+    :return: Tupel 
+    """
     ishod = False
-    if numberOfWhite == 0:
-        if playerchess == "white":
-            ishod = "lose"
-        else:
-            ishod = "win"
-    elif numberOfBlack == 0:
-        if playerchess == "white":
-            ishod = "win"
-        else:
-            ishod = "lose"
-    return ishod
+    endgame = False
+    if numberOfBlack == 0 or numberOfWhite == 0:
+        if numberOfWhite == 0:
+            if playerchess == "white":
+                ishod = "lose"
+            else:
+                ishod = "win"
+        elif numberOfBlack == 0:
+            if playerchess == "white":
+                ishod = "win"
+            else:
+                ishod = "lose"
+    return endgame, ishod
+
+
+def renderGame(surface):
+    for i in range(10):
+        for j in range(10):
+            try:
+                polemass[i][j].render(surface)
+            except(AttributeError):
+                print("AttributeError check render")
+            except Exception as e:
+                print(e)
+                print(str(i) + " " + str(j))
+
 
 def how_kill():
     """
