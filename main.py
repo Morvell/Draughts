@@ -13,20 +13,16 @@ i_menu = pygame.image.load('pic/menu.png')
 i_rightscreen = pygame.image.load('pic/rightscreen.png')
 
 
-
-# Блок выбора цвета и стороны шашек
-# side - сторона на которой будут находится белые шашки down или up
-
-
-startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
 done = True
 
-
-
-punkts = [(400, 200, u'Start', (123, 15, 34), (235, 75, 156), 0),
+punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
+          (300, 300, u'Game with AI', (123, 15, 34), (235, 75, 156), 1),
           (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
+
 game = Menu(punkts)
-game.run()
+game_type, game_AI, selectchess = game.run()
+set_playerchess(selectchess)
+startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
 
 pygame.font.init()
 font = pygame.font.SysFont("monospace", 50)
@@ -34,11 +30,10 @@ fontLittle = pygame.font.SysFont("monospace", 25)
 
 while done:
 
-    if numberOfBlack == 0 or numberOfWhite == 0:
-        endgame = endGame()
-        if endgame:
-            endMenu = endMenu.EndMenu()
-            endMenu.run(endgame)
+    endgame, ishod = endGame()
+    if endgame:
+        endMenu = endMenu.EndMenu()
+        endMenu.run(ishod)
 
     mp = pygame.mouse.get_pos()
 
@@ -54,24 +49,16 @@ while done:
 
     labalGoChess = font.render("Ходят", 1, (78, 226, 14))
 
-
     window.blit(mainscreen, (0, 0))
     window.blit(rightscreen, (720, 0))
     rightscreen.blit(i_rightscreen, (0, 0))
     mainscreen.blit(board, (0, 0))
-    changeNumberRender(rightscreen)
     rightscreen.blit(labalGoChess, (25, 220))
+    changeNumberRender(rightscreen)
     whoGo(rightscreen)
 
+    renderGame(mainscreen)
 
-    for i in range(10):
-        for j in range(10):
-            try:
-                polemass[i][j].render(mainscreen)
-            except(AttributeError):
-                print("AttributeError check render")
-            except Exception as e:
-                print(e)
-                print(str(i) + " " + str(j))
+
 
     pygame.display.flip()

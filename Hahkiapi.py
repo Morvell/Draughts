@@ -34,6 +34,10 @@ lengthOrWidth = 72
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
 
+def set_playerchess(select):
+    global playerchess
+    playerchess = select
+
 
 def whoGo(surface):
     """
@@ -78,9 +82,7 @@ def without_net(mp):
                             mouse_button_down_fl = True
                             ipos = i
                             jpos = j
-                            break
-                        else:
-                            break
+                        break
                     else:
                         print('in False')
                         mouse_button_down_fl = True
@@ -140,7 +142,8 @@ def changeNumber():
     """
     Изменяет количество шашек на игровом столе
     """
-    global numberOfBlack, numberOfWhite
+    global numberOfBlack, numberOfWhite, playerchess
+    print(playerchess)
     if how_kill() == "white":
         numberOfWhite -= 1
     else:
