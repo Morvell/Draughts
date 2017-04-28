@@ -19,6 +19,7 @@ labalBlackChess = font.render("Черные", 1, (0, 0, 0))
 side = 'down'
 playerchess = 'black'
 gochess = 'white'
+AI = False
 
 polemass = []
 
@@ -33,6 +34,10 @@ lengthOrWidth = 72
 
 i_db = pygame.image.load('pic/DBlack.gif')
 i_dw = pygame.image.load('pic/DWhite.gif')
+
+def set_AI(select):
+    global AI
+    AI = select
 
 def set_playerchess(select):
     global playerchess
@@ -61,15 +66,34 @@ def without_net(mp):
     global gochess
     global ipos
     global jpos
-    
-    i, j = checkchess(mp)
-    if continuehod == True and polemass[i][j] == continuehahka:
+    global AI
+    global playerchess
+
+    if AI and gochess != playerchess:
+        for i in range(10):
+            for j in range(10):
+                gameLogic(i, j)
+    else:
+        i, j = checkchess(mp)
+        gameLogic(i, j)
+
+
+def gameLogic(i, j):
+    global continuehod
+    global continuehahka
+    global mouse_button_down_fl
+    global gochess
+    global ipos
+    global jpos
+    global AI
+    global playerchess
+    if continuehod and polemass[i][j] == continuehahka:
         print("#1")
         mouse_button_down_fl = True
         continuehod = False
         ipos = i
         jpos = j
-    elif continuehod == True and polemass[i][j] != continuehahka:
+    elif continuehod and polemass[i][j] != continuehahka:
         print("#2")
         return
         # блок выбора шашки
@@ -122,7 +146,7 @@ def without_net(mp):
                                                                            polemass[i][j]))) and \
                         polemass[i][
                             j].vid == 'kletka':
-            print('in True')
+            print('#12')
             mouse_button_down_fl = False
             hod(ipos, jpos, i, j)
             set_damka(polemass, i, j)
@@ -131,7 +155,6 @@ def without_net(mp):
             else:
                 gochess = 'white'
             return
-
 
 
 def changeNumberRender(surface):
@@ -185,7 +208,7 @@ def renderGame(surface):
         for j in range(10):
             try:
                 polemass[i][j].render(surface)
-            except(AttributeError):
+            except AttributeError:
                 print("AttributeError check render")
             except Exception as e:
                 print(e)
@@ -257,7 +280,7 @@ def checkchess(mp):
         for j in range(10):
             if (polemass[i][j].x < mp[0] < (polemass[i][j].x + lengthOrWidth) and polemass[i][j].y < mp[1] <
                 (polemass[i][j].y + lengthOrWidth)):
-                    return i, j
+                return i, j
 
 
 def check_hod_without_enemy(chess, poss):
@@ -410,7 +433,7 @@ def check_correct_damka_hod(chess, poss):
 
 def set_damka(polemass, i, j):
     """
-        стонавливает шашку дамкой
+        устонавливает шашку дамкой
         :param polemass: массив с данными доски
         :param i: первый индекс меняемой шашки в массиве polemass
         :param j: второй индекс меняемой шашки в массиве polemass

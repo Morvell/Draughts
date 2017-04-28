@@ -18,7 +18,6 @@ pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
 mainscreen = pygame.Surface((720, 720))
 rightscreen = pygame.Surface((280, 720))
 
-
 done = True
 
 punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
@@ -26,7 +25,11 @@ punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
           (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
 
 game = MainMenu(punkts)
-game_type, game_AI, selectchess = game.run()
+game_type, selectchess = game.run()
+
+if game_type == "AI":
+    set_AI(True)
+
 set_playerchess(selectchess)
 startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
 
@@ -48,7 +51,7 @@ while done:
         if e.type == pygame.QUIT:
             done = False
 
-        if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+        if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1 :
             without_net(mp)
 
     # render text

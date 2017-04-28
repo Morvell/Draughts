@@ -18,10 +18,15 @@ class MainMenu(Menu):
             menuS = MenuSide()
             select = menuS.run()
             self.game_type = "easy"
-            self.game_AI = 0
             self.game_side = select
-            return self.game_type, self.game_AI, self.game_side
+            return self.game_type, self.game_side
         if self.punkt == AI_game:
-            pass
+            self.done = False
+            menuS = MenuSide()
+            select = menuS.run()
+            self.game_type = "AI"
+            self.game_side = select
+            return self.game_type, self.game_side
+
         elif self.punkt == exit:
             sys.exit()
