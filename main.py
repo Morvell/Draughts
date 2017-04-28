@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import endMenu
 from Hahkiapi import *
-from menu import *
+from MainMenu import *
 
 pygame.init()
 
@@ -12,6 +12,12 @@ i_menu = pygame.image.load('pic/menu.png')
 
 i_rightscreen = pygame.image.load('pic/rightscreen.png')
 
+window = pygame.display.set_mode((920, 720))
+pygame.display.set_caption(u"Hahki")
+pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
+mainscreen = pygame.Surface((720, 720))
+rightscreen = pygame.Surface((280, 720))
+
 
 done = True
 
@@ -19,7 +25,7 @@ punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
           (300, 300, u'Game with AI', (123, 15, 34), (235, 75, 156), 1),
           (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
 
-game = Menu(punkts)
+game = MainMenu(punkts)
 game_type, game_AI, selectchess = game.run()
 set_playerchess(selectchess)
 startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))

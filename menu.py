@@ -1,14 +1,6 @@
 import pygame
 import sys
 
-from MenuSide import MenuSide
-
-window = pygame.display.set_mode((920, 720))
-pygame.display.set_caption(u"Hahki")
-pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
-mainscreen = pygame.Surface((720, 720))
-rightscreen = pygame.Surface((280, 720))
-
 
 class Menu:
 
@@ -19,6 +11,12 @@ class Menu:
     done = True
     font_menu = pygame.font.SysFont("comicsansms", 50)
     punkt = 0
+
+    window = pygame.display.set_mode((920, 720))
+    pygame.display.set_caption(u"Hahki")
+    pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
+    mainscreen = pygame.Surface((720, 720))
+    rightscreen = pygame.Surface((280, 720))
 
     def __init__(self, punkts):
 
@@ -39,27 +37,7 @@ class Menu:
                 self.punkt = i[5]
 
     def doneWithPunkt(self):
-
-        easy_game = 0
-        AI_game = 1
-        exit = 2
-
-        if self.punkt == easy_game:
-            self.done = False
-            menuS = MenuSide()
-            select = menuS.run()
-            self.game_type = "easy"
-            self.game_AI = 0
-            self.game_side = select
-            return self.game_type, self.game_AI, self.game_side
-
-
-
-        if self.punkt == AI_game:
-            pass
-
-        elif self.punkt == exit:
-            sys.exit()
+        pass
 
 
     def run(self):
@@ -68,7 +46,7 @@ class Menu:
 
             mp = pygame.mouse.get_pos()
             self.collaidePunkt(mp)
-            self.render(mainscreen, self.font_menu, self.punkt)
+            self.render(self.mainscreen, self.font_menu, self.punkt)
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
@@ -85,8 +63,8 @@ class Menu:
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                     return self.doneWithPunkt()
 
-            window.blit(mainscreen, (0, 0))
-            window.blit(rightscreen, (720, 0))
-            mainscreen.blit(self.i_menu, (0, 0))
-            rightscreen.blit(self.i_rmenu, (0, 0))
+            self.window.blit(self.mainscreen, (0, 0))
+            self.window.blit(self.rightscreen, (720, 0))
+            self.mainscreen.blit(self.i_menu, (0, 0))
+            self.rightscreen.blit(self.i_rmenu, (0, 0))
             pygame.display.flip()
