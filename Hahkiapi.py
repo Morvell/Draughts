@@ -61,72 +61,77 @@ def without_net(mp):
     global gochess
     global ipos
     global jpos
-    for i in range(10):
-        for j in range(10):
-            if checkchess(mp, polemass, i, j):
-                if continuehod == True and polemass[i][j] == continuehahka:
-                    print('in False')
-                    mouse_button_down_fl = True
-                    continuehod = False
-                    ipos = i
-                    jpos = j
-                elif continuehod == True and polemass[i][j] != continuehahka:
-                    break
-                # блок выбора шашки
-                elif (mouse_button_down_fl == False or polemass[i][j].vid == gochess) and polemass[i][
-                    j].vid != 'kletka' and polemass[i][j].vid == gochess:
-                    if len(check_chess_with_enemy(polemass, gochess)) != 0:
-                        if check_correct_chess(polemass, check_chess_with_enemy(polemass, gochess), polemass[i][j]):
+    
+    i, j = checkchess(mp)
+    if continuehod == True and polemass[i][j] == continuehahka:
+        print("#1")
+        mouse_button_down_fl = True
+        continuehod = False
+        ipos = i
+        jpos = j
+    elif continuehod == True and polemass[i][j] != continuehahka:
+        print("#2")
+        return
+        # блок выбора шашки
+    elif (mouse_button_down_fl == False or polemass[i][j].vid == gochess) and polemass[i][
+        j].vid != 'kletka' and polemass[i][j].vid == gochess:
+        print("#3")
+        if len(check_chess_with_enemy(polemass, gochess)) != 0:
+            print("#4")
+            if check_correct_chess(polemass, check_chess_with_enemy(polemass, gochess), polemass[i][j]):
+                print("#5")
+                mouse_button_down_fl = True
+                ipos = i
+                jpos = j
+            return
+        else:
+            print("#6")
+            mouse_button_down_fl = True
+            ipos = i
+            jpos = j
+            return
+            # блок хода
+    elif mouse_button_down_fl == True and gochess != polemass[i][j].vid:
+        print("#7")
+        mass = check_enemy(polemass, polemass[ipos][jpos], ipos, jpos)
+        if len(mass) != 0:
+            print("#8")
+            if hod_with_enemy(mass, ipos, jpos, i, j):
+                print("#9")
+                changeNumber()
+                mouse_button_down_fl = False
+                set_damka(polemass, i, j)
 
-                            print('in False')
-                            mouse_button_down_fl = True
-                            ipos = i
-                            jpos = j
-                        break
+                if len(check_enemy(polemass, polemass[i][j], i, j)) == 0:
+                    print("#10")
+                    set_damka(polemass, i, j)
+                    if gochess == 'white':
+                        gochess = 'black'
                     else:
-                        print('in False')
-                        mouse_button_down_fl = True
-
-                        ipos = i
-                        jpos = j
-                        break
-                # блок хода
-                elif mouse_button_down_fl == True and gochess != polemass[i][j].vid:
-                    mass = check_enemy(polemass, polemass[ipos][jpos], ipos, jpos)
-                    if len(mass) != 0:
-                        if hod_with_enemy(mass, ipos, jpos, i, j):
-                            changeNumber()
-
-                            mouse_button_down_fl = False
-                            set_damka(polemass, i, j)
-
-                            if len(check_enemy(polemass, polemass[i][j], i, j)) == 0:
-                                set_damka(polemass, i, j)
-                                if gochess == 'white':
-                                    gochess = 'black'
-                                else:
-                                    gochess = 'white'
-                            else:
-                                set_damka(polemass, i, j)
-                                continuehod = True
-                                continuehahka = polemass[i][j]
-                            break
+                        gochess = 'white'
+                else:
+                    print("#11")
+                    set_damka(polemass, i, j)
+                    continuehod = True
+                    continuehahka = polemass[i][j]
+                return
 
 
-                    elif (check_hod_without_enemy(polemass[ipos][jpos], polemass[i][j]) or (
-                                polemass[ipos][jpos].damka and check_correct_damka_hod(polemass[ipos][jpos],
-                                                                                       polemass[i][j]))) and \
-                                    polemass[i][
-                                        j].vid == 'kletka':
-                        print('in True')
-                        mouse_button_down_fl = False
-                        hod(ipos, jpos, i, j)
-                        set_damka(polemass, i, j)
-                        if gochess == 'white':
-                            gochess = 'black'
-                        else:
-                            gochess = 'white'
-                        break
+        elif (check_hod_without_enemy(polemass[ipos][jpos], polemass[i][j]) or (
+                    polemass[ipos][jpos].damka and check_correct_damka_hod(polemass[ipos][jpos],
+                                                                           polemass[i][j]))) and \
+                        polemass[i][
+                            j].vid == 'kletka':
+            print('in True')
+            mouse_button_down_fl = False
+            hod(ipos, jpos, i, j)
+            set_damka(polemass, i, j)
+            if gochess == 'white':
+                gochess = 'black'
+            else:
+                gochess = 'white'
+            return
+
 
 
 def changeNumberRender(surface):
@@ -240,17 +245,19 @@ def hod(ipos, jpos, i, j):
     polemass[ipos][jpos] = Hahki.Kletka(dopold[0], dopold[1])
 
 
-def checkchess(mp, polemass, i, j):
+def checkchess(mp):
     """
     производит проверку на принадлежность указателя мыши клетке на доске
     :param mp: данные о указатели мыши
-    :param polemass: массив данных л доске
     :param i: 1 индекс в массиве
     :param j: 2 индекс в массиве
     :return: True если мышь находится на i и j  позиции или False в противном
     """
-    return (polemass[i][j].x < mp[0] < (polemass[i][j].x + lengthOrWidth) and polemass[i][j].y < mp[1] <
-            (polemass[i][j].y + lengthOrWidth))
+    for i in range(10):
+        for j in range(10):
+            if (polemass[i][j].x < mp[0] < (polemass[i][j].x + lengthOrWidth) and polemass[i][j].y < mp[1] <
+                (polemass[i][j].y + lengthOrWidth)):
+                    return i, j
 
 
 def check_hod_without_enemy(chess, poss):
