@@ -70,8 +70,8 @@ def without_net(mp):
     global playerchess
 
     if AI and gochess != playerchess:
-        for i in range(10):
-            for j in range(10):
+        for i in reversed(range(10)):
+            for j in reversed(range(10)):
                 gameLogic(i, j)
     else:
         i, j = checkchess(mp)
