@@ -14,7 +14,7 @@ labelWhite = font.render(str(numberOfWhite), 1, (255, 255, 255))
 labelBlack = font.render(str(numberOfBlack), 1, (0, 0, 0))
 
 labelWhiteChess = font.render("Белые", 1, (255, 255, 255))
-labalBlackChess = font.render("Черные", 1, (0, 0, 0))
+labelBlackChess = font.render("Черные", 1, (0, 0, 0))
 
 side = 'down'
 playerchess = 'black'
@@ -52,7 +52,7 @@ def whoGo(surface):
     if gochess == "white":
         surface.blit(labelWhiteChess, (25, 300))
     else:
-        surface.blit(labalBlackChess, (15, 300))
+        surface.blit(labelBlackChess, (15, 300))
 
 
 def without_net(mp):

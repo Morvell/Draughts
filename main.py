@@ -44,10 +44,10 @@ fontLittle = pygame.font.SysFont("monospace", 25)
 
 while done:
 
-    endgame, ishod = endGame()
+    endgame, whoWin = endGame()
     if endgame:
         endMenu = endMenu.EndMenu()
-        endMenu.run(ishod)
+        endMenu.run(whoWin)
 
     mp = pygame.mouse.get_pos()
 
@@ -72,7 +72,5 @@ while done:
     whoGo(rightscreen)
 
     renderGame(mainscreen)
-
-
 
     pygame.display.flip()
