@@ -332,51 +332,50 @@ def check_enemy(polemass, chess, ipos, jpos):
     return enemymass
 
 
-def startpos(mass, side='down', i_mass=[]):
+def startpos(side='down', i_mass=[]):
     """
     Задает массив доски с шашками
-    :param mass: массив в который будут заносится данные
     :param side: сторона игрока down или up
     :return: ничего не возвращает тк заполняет преданный массив
     """
     i_hb = i_mass[0]
     i_hw = i_mass[1]
     for i in range(10):
-        mass.append([])
+        polemass.append([])
         for j in range(10):
-            mass[i].append([])
+            polemass[i].append([])
     if side == 'down':
         for i in (0, 2):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
         for i in (1, 3):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'up')
         for i in (6, 8):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
         for i in (7, 9):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'down')
 
     elif side == 'up':
         for i in (0, 2):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
         for i in (1, 3):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'white', i_hw, 'up')
         for i in (6, 8):
             for j in range(10)[1::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
         for i in (7, 9):
             for j in range(10)[::2]:
-                mass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
+                polemass[i][j] = Hahki.Hahka(lengthOrWidth * j, lengthOrWidth * i, 'black', i_hb, 'down')
 
     for i in range(10):
         for j in range(10):
-            if type(mass[i][j]) == list:
-                mass[i][j] = Hahki.Kletka(lengthOrWidth * j, lengthOrWidth * i)
+            if type(polemass[i][j]) == list:
+                polemass[i][j] = Hahki.Kletka(lengthOrWidth * j, lengthOrWidth * i)
 
 
 def check_chess_with_enemy(mass, gocolor):

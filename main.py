@@ -2,21 +2,10 @@
 import endMenu
 from Hahkiapi import *
 from MainMenu import *
+from GameGUI import *
 
-pygame.init()
 
-board = pygame.image.load('pic/Board.gif')
-i_hb = pygame.image.load('pic/HBlack.gif')
-i_hw = pygame.image.load('pic/HWhite.gif')
-i_menu = pygame.image.load('pic/menu.png')
-
-i_rightscreen = pygame.image.load('pic/rightscreen.png')
-
-window = pygame.display.set_mode((920, 720))
-pygame.display.set_caption(u"Hahki")
-pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
-mainscreen = pygame.Surface((720, 720))
-rightscreen = pygame.Surface((280, 720))
+gameGUI = GameGUI()
 
 done = True
 
@@ -34,13 +23,9 @@ set_playerchess(selectchess)
 
 global playerchess
 if playerchess == "black":
-    startpos(polemass, "up", (i_hb, i_hw, i_db, i_dw))
+    startpos("up", (gameGUI.i_hb, gameGUI.i_hw, i_db, i_dw))
 else:
-    startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
-
-pygame.font.init()
-font = pygame.font.SysFont("monospace", 50)
-fontLittle = pygame.font.SysFont("monospace", 25)
+    startpos("down", (gameGUI.i_hb, gameGUI.i_hw, i_db, i_dw))
 
 while done:
 
@@ -59,18 +44,8 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1 :
             without_net(mp)
 
-    # render text
+    changeNumberRender(gameGUI.rightscreen)
+    whoGo(gameGUI.rightscreen)
+    renderGame(gameGUI.mainscreen)
+    gameGUI.render()
 
-    labalGoChess = font.render("Ходят", 1, (78, 226, 14))
-
-    window.blit(mainscreen, (0, 0))
-    window.blit(rightscreen, (720, 0))
-    rightscreen.blit(i_rightscreen, (0, 0))
-    mainscreen.blit(board, (0, 0))
-    rightscreen.blit(labalGoChess, (25, 220))
-    changeNumberRender(rightscreen)
-    whoGo(rightscreen)
-
-    renderGame(mainscreen)
-
-    pygame.display.flip()
