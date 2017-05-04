@@ -31,7 +31,12 @@ if game_type == "AI":
     set_AI(True)
 
 set_playerchess(selectchess)
-startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
+
+global playerchess
+if playerchess == "black":
+    startpos(polemass, "up", (i_hb, i_hw, i_db, i_dw))
+else:
+    startpos(polemass, side, (i_hb, i_hw, i_db, i_dw))
 
 pygame.font.init()
 font = pygame.font.SysFont("monospace", 50)
