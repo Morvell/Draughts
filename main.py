@@ -6,7 +6,7 @@ from GameGUI import *
 
 
 gameGUI = GameGUI()
-mainGame = HahkiAPI()
+game = HahkiAPI()
 
 done = True
 
@@ -14,23 +14,23 @@ punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
           (300, 300, u'Game with AI', (123, 15, 34), (235, 75, 156), 1),
           (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
 
-game = MainMenu(punkts)
-game_type, selectchess = game.run()
+mainMenu = MainMenu(punkts)
+game_type, selectchess = mainMenu.run()
 
 if game_type == "AI":
-    mainGame.set_AI(True)
+    game.set_AI(True)
 
-mainGame.set_playerchess(selectchess)
+game.set_playerchess(selectchess)
 
 
-if mainGame.playerchess == "black":
-    mainGame.startpos("up", (gameGUI.i_hb, gameGUI.i_hw, mainGame.i_db, mainGame.i_dw))
+if game.playerchess == "black":
+    game.startpos("up", (gameGUI.i_hb, gameGUI.i_hw, game.i_db, game.i_dw))
 else:
-    mainGame.startpos("down", (gameGUI.i_hb, gameGUI.i_hw, mainGame.i_db, mainGame.i_dw))
+    game.startpos("down", (gameGUI.i_hb, gameGUI.i_hw, game.i_db, game.i_dw))
 
 while done:
 
-    endgame, whoWin = mainGame.endGame()
+    endgame, whoWin = game.endGame()
     if endgame:
         endMenu = endMenu.EndMenu()
         endMenu.run(whoWin)
@@ -43,10 +43,10 @@ while done:
             done = False
 
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1 :
-            mainGame.without_net(mp)
+            game.without_net(mp)
 
-    mainGame.changeNumberRender(gameGUI.rightscreen)
-    mainGame.whoGo(gameGUI.rightscreen)
-    mainGame.renderGame(gameGUI.mainscreen)
+    game.changeNumberRender(gameGUI.rightscreen)
+    game.whoGo(gameGUI.rightscreen)
+    game.renderGame(gameGUI.mainscreen)
     gameGUI.render()
 
