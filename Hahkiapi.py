@@ -62,8 +62,8 @@ class HahkiAPI:
         """
 
         if self.AI and self.gochess != self.playerchess:
-            for i in reversed(range(10)):
-                for j in reversed(range(10)):
+            for i in range(10):
+                for j in range(10):
                     self.gameLogic(i, j)
         else:
             i, j = self.checkchess(mp)
