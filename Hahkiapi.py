@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pygame
 import Hahki
 
 
@@ -8,14 +7,7 @@ class HahkiAPI:
         self.numberOfWhite = 20
         self.numberOfBlack = 20
 
-        self.font = pygame.font.SysFont("monospace", 50)
-
         self.last_kill = "kletka"
-
-
-
-        self.labelWhiteChess = self.font.render("Белые", 1, (255, 255, 255))
-        self.labelBlackChess = self.font.render("Черные", 1, (0, 0, 0))
 
         self.side = 'down'
         self.playerchess = 'black'
@@ -33,25 +25,12 @@ class HahkiAPI:
 
         self.lengthOrWidth = 72
 
-        self.i_db = pygame.image.load('pic/DBlack.gif')
-        self.i_dw = pygame.image.load('pic/DWhite.gif')
-
     def set_AI(self, select):
         self.AI = select
 
     def set_playerchess(self, select):
         self.playerchess = select
 
-
-    def whoGo(self, surface):
-        """
-        Отображает кто должен ходить
-        :param surface: поверхнотсь для отображения 
-        """
-        if self.gochess == "white":
-            surface.blit(self.labelWhiteChess, (25, 300))
-        else:
-            surface.blit(self.labelBlackChess, (15, 300))
 
 
     def without_net(self, mp):
@@ -152,9 +131,6 @@ class HahkiAPI:
             self.numberOfWhite -= 1
         else:
             self.numberOfBlack -= 1
-        global labelBlack, labelWhite
-        labelWhite = self.font.render(str(self.numberOfWhite), 1, (255, 255, 255))
-        labelBlack = self.font.render(str(self.numberOfBlack), 1, (0, 0, 0))
         print(str(self.numberOfWhite) + "|" + str(self.numberOfBlack))
 
 
@@ -179,16 +155,7 @@ class HahkiAPI:
         return endgame, ishod
 
 
-    def renderGame(self, surface):
-        for i in range(10):
-            for j in range(10):
-                try:
-                    self.polemass[i][j].render(surface)
-                except AttributeError:
-                    print("AttributeError check render")
-                except Exception as e:
-                    print(e)
-                    print(str(i) + " " + str(j))
+
 
 
     def how_kill(self):

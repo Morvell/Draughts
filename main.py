@@ -40,7 +40,5 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1 :
             game.without_net(mp)
 
-    game.whoGo(gameGUI.rightscreen)
-    game.renderGame(gameGUI.mainscreen)
     gameGUI.render()
 
