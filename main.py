@@ -4,9 +4,8 @@ from Hahkiapi import *
 from MainMenu import *
 from GameGUI import *
 
-
-gameGUI = GameGUI()
 game = HahkiAPI()
+gameGUI = GameGUI(game)
 
 done = True
 
@@ -22,11 +21,7 @@ if game_type == "AI":
 
 game.set_playerchess(selectchess)
 
-
-if game.playerchess == "black":
-    game.startpos("up", (gameGUI.i_hb, gameGUI.i_hw, game.i_db, game.i_dw))
-else:
-    game.startpos("down", (gameGUI.i_hb, gameGUI.i_hw, game.i_db, game.i_dw))
+gameGUI.set_start_position()
 
 while done:
 
@@ -45,7 +40,6 @@ while done:
         if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1 :
             game.without_net(mp)
 
-    game.changeNumberRender(gameGUI.rightscreen)
     game.whoGo(gameGUI.rightscreen)
     game.renderGame(gameGUI.mainscreen)
     gameGUI.render()

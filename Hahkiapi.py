@@ -12,8 +12,7 @@ class HahkiAPI:
 
         self.last_kill = "kletka"
 
-        self.labelWhite = self.font.render(str(self.numberOfWhite), 1, (255, 255, 255))
-        self.labelBlack = self.font.render(str(self.numberOfBlack), 1, (0, 0, 0))
+
 
         self.labelWhiteChess = self.font.render("Белые", 1, (255, 255, 255))
         self.labelBlackChess = self.font.render("Черные", 1, (0, 0, 0))
@@ -141,13 +140,7 @@ class HahkiAPI:
                 return
 
 
-    def changeNumberRender(self, surface):
-        """
-        Отображает количество шшашек на поле
-        :param surface: поверхность для отображения
-        """
-        surface.blit(self.labelWhite, (70, 20))
-        surface.blit(self.labelBlack, (70, 120))
+
 
 
     def changeNumber(self):
