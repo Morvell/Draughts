@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import json
 import socket
 import sys
-import json
-import netveriable
 
+from trash import netveriable
 
 
 class Client:
@@ -84,8 +84,8 @@ class Server:
             if isinstance(self.data, list) and len(self.data) == 2 and self.data[0]=='ready':
 
                 netveriable.ENEMY_NICKNAME = self.data[1]
-                self.s.sendto(json.dumps(('ready',netveriable.NICKNAME)).encode(),
-                              (netveriable.SEND_IP,netveriable.SEND_PORT))
+                self.s.sendto(json.dumps(('ready', netveriable.NICKNAME)).encode(),
+                              (netveriable.SEND_IP, netveriable.SEND_PORT))
                 netveriable.ENEMY_READY = True
             elif isinstance(self.data, list) and len(self.data) == 2 and self.data[0]=='next':
                 from main import gochess,playerchess,polemass

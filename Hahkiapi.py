@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import Hahki
+from GameGUI import GameGUI
 
 
 class HahkiAPI:
@@ -20,18 +21,11 @@ class HahkiAPI:
         self.continuehod = False
         self.continuehahka = None
 
+        # ipos, jpos = позиция шашки на которую иначально выбрали для действий с ней
         self.ipos = 0
         self.jpos = 0
 
         self.lengthOrWidth = 72
-
-    def set_AI(self, select):
-        self.AI = select
-
-    def set_playerchess(self, select):
-        self.playerchess = select
-
-
 
     def without_net(self, mp):
         """
@@ -46,7 +40,6 @@ class HahkiAPI:
         else:
             i, j = self.checkchess(mp)
             self.gameLogic(i, j)
-
 
     def gameLogic(self, i, j):
 
@@ -105,8 +98,9 @@ class HahkiAPI:
 
 
             elif (self.check_hod_without_enemy(self.polemass[self.ipos][self.jpos], self.polemass[i][j]) or (
-                        self.polemass[self.ipos][self.jpos].damka and self.check_correct_damka_hod(self.polemass[self.ipos][self.jpos],
-                                                                               self.polemass[i][j]))) and \
+                        self.polemass[self.ipos][self.jpos].damka and self.check_correct_damka_hod(
+                        self.polemass[self.ipos][self.jpos],
+                        self.polemass[i][j]))) and \
                             self.polemass[i][j].vid == 'kletka':
                 print('#12')
                 self.mouse_button_down_fl = False
@@ -117,10 +111,6 @@ class HahkiAPI:
                 else:
                     self.gochess = 'white'
                 return
-
-
-
-
 
     def changeNumber(self):
         """
@@ -133,11 +123,10 @@ class HahkiAPI:
             self.numberOfBlack -= 1
         print(str(self.numberOfWhite) + "|" + str(self.numberOfBlack))
 
-
     def endGame(self):
         """
         Проверка на конец игры
-        :return: Tupel 
+        :return: Tupel закончена ли игра и выиграл ли игрок
         """
         ishod = False
         endgame = False
@@ -154,10 +143,7 @@ class HahkiAPI:
                     ishod = "lose"
         return endgame, ishod
 
-
-
-
-
+    # with test
     def how_kill(self):
         """
         функция для распознования цвета последней сбитой шашки
@@ -167,7 +153,6 @@ class HahkiAPI:
             return "black"
         elif self.last_kill == "white":
             return "white"
-
 
     def hod_with_enemy(self, mass, ipos, jpos, i, j):
         """
@@ -193,7 +178,6 @@ class HahkiAPI:
 
         return False
 
-
     def hod(self, ipos, jpos, i, j):
         """
         производит простой ход пешки
@@ -209,7 +193,6 @@ class HahkiAPI:
         self.polemass[i][j] = self.polemass[ipos][jpos]
         self.polemass[ipos][jpos] = Hahki.Kletka(dopold[0], dopold[1])
 
-
     def checkchess(self, mp):
         """
         производит проверку на принадлежность указателя мыши клетке на доске
@@ -220,10 +203,10 @@ class HahkiAPI:
         """
         for i in range(10):
             for j in range(10):
-                if (self.polemass[i][j].x < mp[0] < (self.polemass[i][j].x + self.lengthOrWidth) and self.polemass[i][j].y < mp[1] <
+                if (self.polemass[i][j].x < mp[0] < (self.polemass[i][j].x + self.lengthOrWidth) and self.polemass[i][
+                    j].y < mp[1] <
                     (self.polemass[i][j].y + self.lengthOrWidth)):
                     return i, j
-
 
     def check_hod_without_enemy(self, chess, poss):
         """
@@ -246,7 +229,6 @@ class HahkiAPI:
                 return False
             else:
                 return True
-
 
     def check_enemy(self, chess, ipos, jpos):
         """
@@ -272,7 +254,6 @@ class HahkiAPI:
 
         return enemymass
 
-
     def startpos(self, side='down', i_mass=[]):
         """
         Задает массив доски с шашками
@@ -288,36 +269,43 @@ class HahkiAPI:
         if side == 'down':
             for i in (0, 2):
                 for j in range(10)[1::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb, 'up')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb,
+                                                      'up')
             for i in (1, 3):
                 for j in range(10)[::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb, 'up')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb,
+                                                      'up')
             for i in (6, 8):
                 for j in range(10)[1::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw, 'down')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw,
+                                                      'down')
             for i in (7, 9):
                 for j in range(10)[::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw, 'down')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw,
+                                                      'down')
 
         elif side == 'up':
             for i in (0, 2):
                 for j in range(10)[1::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw, 'up')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw,
+                                                      'up')
             for i in (1, 3):
                 for j in range(10)[::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw, 'up')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'white', i_hw,
+                                                      'up')
             for i in (6, 8):
                 for j in range(10)[1::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb, 'down')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb,
+                                                      'down')
             for i in (7, 9):
                 for j in range(10)[::2]:
-                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb, 'down')
+                    self.polemass[i][j] = Hahki.Hahka(self.lengthOrWidth * j, self.lengthOrWidth * i, 'black', i_hb,
+                                                      'down')
 
         for i in range(10):
             for j in range(10):
                 if type(self.polemass[i][j]) == list:
                     self.polemass[i][j] = Hahki.Kletka(self.lengthOrWidth * j, self.lengthOrWidth * i)
-
 
     def check_chess_with_enemy(self, gocolor):
         """
@@ -333,7 +321,6 @@ class HahkiAPI:
                 else:
                     arraychess.append(self.check_enemy(self.polemass[i][j], i, j))
         return arraychess
-
 
     def check_correct_chess(self, corrrectdatamass, chess):
         """
@@ -352,7 +339,6 @@ class HahkiAPI:
                     return True
         return fl
 
-
     def check_correct_damka_hod(self, chess, poss):
         """
             проверяет на правельность хода если шашка дамка
@@ -367,7 +353,6 @@ class HahkiAPI:
             if chess.y != poss.y + self.lengthOrWidth and chess.y != poss.y - self.lengthOrWidth:
                 return False
         return True
-
 
     def set_damka(self, i, j):
         """

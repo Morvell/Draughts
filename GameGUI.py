@@ -1,10 +1,8 @@
 import pygame
 
 
-
 class GameGUI:
     def __init__(self, gameLogic):
-        pygame.init()
         pygame.font.init()
 
         self.logic = gameLogic
@@ -31,7 +29,28 @@ class GameGUI:
         self.mainscreen = pygame.Surface((720, 720))
         self.rightscreen = pygame.Surface((280, 720))
 
+    def mouseEventCheck(self):
+        """
+        обрабатывает движение мыши
+        :return: True или False если пользователь закрыл игру
+        """
+        mp = pygame.mouse.get_pos()
+        done = True
+
+        for e in pygame.event.get():
+
+            if e.type == pygame.QUIT:
+                done = False
+
+            if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                self.logic.without_net(mp)
+
+        return done
+
     def set_start_position(self):
+        """
+        устонавливет сартовую позицию
+        """
         if self.logic.playerchess == "black":
             self.logic.startpos("up", (self.i_hb, self.i_hw, self.i_db, self.i_dw))
         else:
@@ -55,7 +74,10 @@ class GameGUI:
         else:
             self.rightscreen.blit(self.labelBlackChess, (15, 300))
 
-    def renderGame(self):
+    def renderGameField(self):
+        """
+        отрисовывает игровое поле 
+        """
         for i in range(10):
             for j in range(10):
                 try:
@@ -67,6 +89,9 @@ class GameGUI:
                     print(str(i) + " " + str(j))
 
     def render(self):
+        """
+        отрисовка всего
+        """
         self.window.blit(self.mainscreen, (0, 0))
         self.window.blit(self.rightscreen, (720, 0))
         self.rightscreen.blit(self.i_rightscreen, (0, 0))
@@ -74,6 +99,6 @@ class GameGUI:
         self.rightscreen.blit(self.labalGoChess, (25, 220))
         self.changeNumberRender()
         self.whoGoRender()
-        self.renderGame()
+        self.renderGameField()
 
         pygame.display.flip()
