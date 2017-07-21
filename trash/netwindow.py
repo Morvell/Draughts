@@ -1,7 +1,8 @@
-from tkinter import *
-import netveriable
 import socket
 import sys
+from tkinter import *
+
+from trash import netveriable
 
 
 def enterwindow():
@@ -71,9 +72,9 @@ def enterwindow():
     EntryNick.pack()
 
     but = Button(datatk,
-                 text="Connect",  # надпись на кнопке
-                 width=30, height=5,  # ширина и высота
-                 bg="white", fg="blue")  # цвет фона и надписи
+                 text="Connect",  # пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                 width=30, height=5,  # пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                 bg="white", fg="blue")  # пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
     but.bind('<Button-1>', init)
 

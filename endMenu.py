@@ -3,7 +3,7 @@ import sys
 
 window = pygame.display.set_mode((920, 720))
 pygame.display.set_caption(u"Hahki")
-pygame.display.set_icon(pygame.image.load('pic\DBlack.gif').convert())
+pygame.display.set_icon(pygame.image.load('pic/DBlack.gif').convert())
 mainscreen = pygame.Surface((720, 720))
 rightscreen = pygame.Surface((280, 720))
 
@@ -17,8 +17,8 @@ labelLose = font.render("Проигрышь", 1, (0, 0, 0))
 class EndMenu:
     def __init__(self):
         super().__init__()
-        self.i_menu = pygame.image.load('pic\menu.png')
-        self.i_rmenu = pygame.image.load('pic\menurightscreen.png')
+        self.i_menu = pygame.image.load('pic/menu.png')
+        self.i_rmenu = pygame.image.load('pic/menurightscreen.png')
        
 
     def run(self, ishod):
