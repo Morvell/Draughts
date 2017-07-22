@@ -5,7 +5,11 @@ class GameGUI:
     def __init__(self, gameLogic):
         pygame.font.init()
 
+        self.lengthOrWidth = 72
+
         self.logic = gameLogic
+
+
 
         self.board = pygame.image.load('pic/Board.gif')
         self.i_hb = pygame.image.load('pic/HBlack.gif')
@@ -13,6 +17,11 @@ class GameGUI:
         self.i_db = pygame.image.load('pic/DBlack.gif')
         self.i_dw = pygame.image.load('pic/DWhite.gif')
         self.i_menu = pygame.image.load('pic/menu.png')
+
+        self.i_hb.set_colorkey((255, 255, 255))
+        self.i_hw.set_colorkey((255, 255, 255))
+        self.i_db.set_colorkey((255, 255, 255))
+        self.i_dw.set_colorkey((255, 255, 255))
 
         self.font = pygame.font.SysFont("monospace", 50)
         self.fontLittle = pygame.font.SysFont("monospace", 25)
@@ -52,9 +61,9 @@ class GameGUI:
         устонавливет сартовую позицию
         """
         if self.logic.playerchess == "black":
-            self.logic.startpos("up", (self.i_hb, self.i_hw, self.i_db, self.i_dw))
+            self.logic.startpos("up")
         else:
-            self.logic.startpos("down", (self.i_hb, self.i_hw, self.i_db, self.i_dw))
+            self.logic.startpos("down")
 
     def changeNumberRender(self):
         """
@@ -81,9 +90,14 @@ class GameGUI:
         for i in range(10):
             for j in range(10):
                 try:
+                    if self.logic.polemass[i][j] == 'b':
+                        self.mainscreen.blit(self.i_hb, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                    elif self.logic.polemass[i][j] == 'w':
+                        self.mainscreen.blit(self.i_hw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+
                     self.logic.polemass[i][j].render(self.mainscreen)
                 except AttributeError:
-                    print("AttributeError check render")
+                    None
                 except Exception as e:
                     print(e)
                     print(str(i) + " " + str(j))
