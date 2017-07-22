@@ -43,18 +43,18 @@ class HahkiAPI:
 
     def gameLogic(self, i, j):
 
-        if self.continuehod and self.polemass[i][j] == self.continuehahka:
+        if self.continuehod and (i, j) == self.continuehahka:
             print("#1")
             self.mouse_button_down_fl = True
             self.continuehod = False
             self.ipos = i
             self.jpos = j
-        elif self.continuehod and self.polemass[i][j] != self.continuehahka:
+        elif self.continuehod and (i, j) != self.continuehahka:
             print("#2")
             return
             # блок выбора шашки
-        elif (self.mouse_button_down_fl == False or self.polemass[i][j].vid == self.gochess) and self.polemass[i][
-            j].vid != 'kletka' and self.polemass[i][j].vid == self.gochess:
+        elif (self.mouse_button_down_fl == False or self.polemass[i][j] == self.gochess) and self.polemass[i][
+            j] != '.' and self.polemass[i][j] == self.gochess:
             print("#3")
             if len(self.check_chess_with_enemy(self.gochess)) != 0:
                 print("#4")
@@ -71,7 +71,7 @@ class HahkiAPI:
                 self.jpos = j
                 return
                 # блок хода
-        elif self.mouse_button_down_fl and self.gochess != self.polemass[i][j].vid:
+        elif self.mouse_button_down_fl and self.gochess != self.polemass[i][j]:
             print("#7")
             massWithEnemy = self.check_enemy(self.polemass[self.ipos][self.jpos], self.ipos, self.jpos)
             if len(massWithEnemy) != 0:
@@ -85,31 +85,31 @@ class HahkiAPI:
                     if len(self.check_enemy(self.polemass[i][j], i, j)) == 0:
                         print("#10")
                         self.set_damka(i, j)
-                        if self.gochess == 'white':
-                            self.gochess = 'black'
+                        if self.gochess == 'w':
+                            self.gochess = 'b'
                         else:
-                            self.gochess = 'white'
+                            self.gochess = 'w'
                     else:
                         print("#11")
                         self.set_damka(i, j)
                         self.continuehod = True
-                        self.continuehahka = self.polemass[i][j]
+                        self.continuehahka = (i, j)
                     return
 
 
             elif (self.check_hod_without_enemy(self.polemass[self.ipos][self.jpos], self.polemass[i][j]) or (
-                        self.polemass[self.ipos][self.jpos].damka and self.check_correct_damka_hod(
+                        (self.polemass[self.ipos][self.jpos] == 'q' or self.polemass[self.ipos][self.jpos] == 'v') and self.check_correct_damka_hod(
                         self.polemass[self.ipos][self.jpos],
                         self.polemass[i][j]))) and \
-                            self.polemass[i][j].vid == 'kletka':
+                            self.polemass[i][j].vid == '.':
                 print('#12')
                 self.mouse_button_down_fl = False
                 self.hod(self.ipos, self.jpos, i, j)
                 self.set_damka(i, j)
-                if self.gochess == 'white':
-                    self.gochess = 'black'
+                if self.gochess == 'w':
+                    self.gochess = 'b'
                 else:
-                    self.gochess = 'white'
+                    self.gochess = 'w'
                 return
 
     def changeNumber(self):
@@ -187,11 +187,10 @@ class HahkiAPI:
         :param j: куда ходит 2
         :return: заполняет массив передеанный массив
         """
-        dopnow = self.polemass[i][j].getpos()
-        dopold = self.polemass[ipos][jpos].getpos()
-        self.polemass[ipos][jpos].setpos(dopnow)
+        dopnow = (j * self.lengthOrWidth, i * self.lengthOrWidth)
+        dopold = (self.jpos * self.lengthOrWidth, self.ipos * self.lengthOrWidth)
         self.polemass[i][j] = self.polemass[ipos][jpos]
-        self.polemass[ipos][jpos] = Hahki.Kletka(dopold[0], dopold[1])
+        self.polemass[ipos][jpos] = '.'
 
     def checkchess(self, mp):
         """
@@ -259,7 +258,6 @@ class HahkiAPI:
         :param side: сторона игрока down или up
         :return: ничего не возвращает тк заполняет преданный массив
         """
-        
 
         if side == 'down':
             self.polemass =[
