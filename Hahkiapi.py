@@ -11,8 +11,8 @@ class HahkiAPI:
         self.last_kill = "kletka"
 
         self.side = 'down'
-        self.playerchess = 'black'
-        self.gochess = 'white'
+        self.playerchess = 'b'
+        self.gochess = 'w'
         self.AI = False
 
         self.polemass = []
@@ -203,9 +203,8 @@ class HahkiAPI:
         """
         for i in range(10):
             for j in range(10):
-                if (self.polemass[i][j].x < mp[0] < (self.polemass[i][j].x + self.lengthOrWidth) and self.polemass[i][
-                    j].y < mp[1] <
-                    (self.polemass[i][j].y + self.lengthOrWidth)):
+                if (j*self.lengthOrWidth < mp[0] < (j*self.lengthOrWidth + self.lengthOrWidth) and i*self.lengthOrWidth < mp[1] <
+                    (i*self.lengthOrWidth + self.lengthOrWidth)):
                     return i, j
 
     def check_hod_without_enemy(self, chess, poss):
