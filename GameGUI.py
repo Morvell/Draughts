@@ -60,7 +60,7 @@ class GameGUI:
         """
         устонавливет сартовую позицию
         """
-        if self.logic.playerchess == "black":
+        if self.logic.playerchess == "b":
             self.logic.startpos("up")
         else:
             self.logic.startpos("down")
@@ -78,7 +78,7 @@ class GameGUI:
         """
         Отображает кто должен ходить 
         """
-        if self.logic.gochess == "white":
+        if self.logic.gochess == "w":
             self.rightscreen.blit(self.labelWhiteChess, (25, 300))
         else:
             self.rightscreen.blit(self.labelBlackChess, (15, 300))
@@ -94,6 +94,11 @@ class GameGUI:
                         self.mainscreen.blit(self.i_hb, (j*self.lengthOrWidth, i * self.lengthOrWidth))
                     elif self.logic.polemass[i][j] == 'w':
                         self.mainscreen.blit(self.i_hw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+
+                    elif self.logic.polemass[i][j] == 'q':
+                        self.mainscreen.blit(self.i_dw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                    elif self.logic.polemass[i][j] == 'v':
+                        self.mainscreen.blit(self.i_db, (j*self.lengthOrWidth, i * self.lengthOrWidth))
 
                     self.logic.polemass[i][j].render(self.mainscreen)
                 except AttributeError:

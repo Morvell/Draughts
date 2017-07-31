@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-import Hahki
-from GameGUI import GameGUI
-
-
 class HahkiAPI:
     def __init__(self):
         self.numberOfWhite = 20
@@ -10,7 +5,7 @@ class HahkiAPI:
 
         self.last_kill = "kletka"
 
-        self.side = 'down'
+        self.side = 'up'
         self.playerchess = 'b'
         self.gochess = 'w'
         self.AI = False
@@ -42,82 +37,308 @@ class HahkiAPI:
             self.gameLogic(i, j)
 
     def gameLogic(self, i, j):
-
-        if self.continuehod and (i, j) == self.continuehahka:
-            print("#1")
-            self.mouse_button_down_fl = True
-            self.continuehod = False
-            self.ipos = i
-            self.jpos = j
-        elif self.continuehod and (i, j) != self.continuehahka:
-            print("#2")
+        # проверка что бы не ходил на пустую клетку
+        if self.polemass[i][j] == ' ':
             return
-            # блок выбора шашки
-        elif (self.mouse_button_down_fl == False or self.polemass[i][j] == self.gochess) and self.polemass[i][
-            j] != '.' and self.polemass[i][j] == self.gochess:
-            print("#3")
-            if len(self.check_chess_with_enemy(self.gochess)) != 0:
-                print("#4")
-                if self.check_correct_chess(self.check_chess_with_enemy(self.gochess), self.polemass[i][j]):
-                    print("#5")
-                    self.mouse_button_down_fl = True
-                    self.ipos = i
-                    self.jpos = j
-                return
-            else:
-                print("#6")
-                self.mouse_button_down_fl = True
+
+        chessWithEnemy = self.checkChessWithEnemy()
+        if len(chessWithEnemy) != 0:
+            if (i, j) in chessWithEnemy:
                 self.ipos = i
                 self.jpos = j
+                self.continuehod = True
                 return
-                # блок хода
-        elif self.mouse_button_down_fl and self.gochess != self.polemass[i][j]:
-            print("#7")
-            massWithEnemy = self.check_enemy(self.polemass[self.ipos][self.jpos], self.ipos, self.jpos)
-            if len(massWithEnemy) != 0:
-                print("#8")
-                if self.hod_with_enemy(massWithEnemy, self.ipos, self.jpos, i, j):
-                    print("#9")
-                    self.changeNumber()
-                    self.mouse_button_down_fl = False
-                    self.set_damka(i, j)
 
-                    if len(self.check_enemy(self.polemass[i][j], i, j)) == 0:
-                        print("#10")
-                        self.set_damka(i, j)
-                        if self.gochess == 'w':
-                            self.gochess = 'b'
-                        else:
-                            self.gochess = 'w'
-                    else:
-                        print("#11")
-                        self.set_damka(i, j)
-                        self.continuehod = True
-                        self.continuehahka = (i, j)
+            if self.continuehod and (self.polemass[self.ipos][self.jpos] == 'q' or self.polemass[self.ipos][self.jpos] == 'v') and self.accesHodForDamka(i,j):
+                self.hodWithEnemyForDamka(i, j)
+                if len(self.checkChessWithEnemy()) == 0:
+                    self.changeGoChess()
+                    self.continuehod = False
+                    return
+                else:
                     return
 
-
-            elif (self.check_hod_without_enemy(self.polemass[self.ipos][self.jpos], self.polemass[i][j]) or (
-                        (self.polemass[self.ipos][self.jpos] == 'q' or self.polemass[self.ipos][self.jpos] == 'v') and self.check_correct_damka_hod(
-                        self.polemass[self.ipos][self.jpos],
-                        self.polemass[i][j]))) and \
-                            self.polemass[i][j].vid == '.':
-                print('#12')
-                self.mouse_button_down_fl = False
-                self.hod(self.ipos, self.jpos, i, j)
-                self.set_damka(i, j)
-                if self.gochess == 'w':
-                    self.gochess = 'b'
+            if self.continuehod and (i, j) in self.accessHodWithEnemy(i,j):
+                self.hodWithEnemy(i, j)
+                if i == 0 or i == 9:
+                    if self.damkaCheckAfterEnemy(i, j):
+                        self.setDamka(i, j)
+                if len(self.checkChessWithEnemy()) == 0:
+                    self.changeGoChess()
+                    self.continuehod = False
+                    return
                 else:
-                    self.gochess = 'w'
+                    return
+            else:
                 return
+
+        if self.ruleTwo(i,j):
+            self.ipos = i
+            self.jpos = j
+            self.continuehod = True
+
+        elif self.continuehod and (self.polemass[self.ipos][self.jpos] == 'q' or self.polemass[self.ipos][self.jpos]=='v'):
+            self.hod(self.ipos, self.jpos, i, j)
+            self.continuehod = False
+            self.changeGoChess()
+
+        elif self.continuehod and self.normalHodRule(self.ipos, self.jpos, i, j):
+            self.hod(self.ipos, self.jpos, i, j)
+            if self.damkaCheckWithoutEnemy(i, j):
+                self.setDamka(i, j)
+            self.continuehod = False
+            self.changeGoChess()
+
+    def hodWithEnemyForDamka(self, i, j):
+        self.ienemy = 0
+        self.jenemy = 0
+
+        if i - self.ipos < 0:
+            self.ienemy = i + 1
+            if j - self.jpos < 0:
+                self.jenemy = j + 1
+            else:
+                self.jenemy = j - 1
+        else:
+            self.ienemy = i - 1
+            if j - self.jpos > 0:
+                self.jenemy = j - 1
+            else:
+                self.jenemy = j + 1
+
+        self.polemass[i][j] = self.polemass[self.ipos][self.jpos]
+        self.polemass[self.ipos][self.jpos] = '.'
+        self.polemass[self.ienemy][self.jenemy] = '.'
+
+    def accesHodForDamka(self, i, j):
+        mass=self.checkEnemyForDamka(self.ipos, self.jpos)
+        self.ienemy = 0
+        self.jenemy = 0
+
+        if i - self.ipos < 0:
+            self.ienemy = i + 1
+            if j - self.jpos < 0:
+                self.jenemy = j + 1
+            else:
+                self.jenemy = j - 1
+        else:
+            self.ienemy = i - 1
+            if j - self.jpos > 0:
+                self.jenemy = j - 1
+            else:
+                self.jenemy = j + 1
+
+        if (self.ienemy, self.jenemy) in mass:
+            return True
+        else:
+            return False
+
+
+    def checkEnemyForDamka(self, i, j):
+        ipos = i
+        jpos = j
+        enemymass = []
+        for k in range(9):
+            for a in (1, -1):
+                for b in (1, -1):
+                    print('[' + str(ipos - a * k) + "][" + str(jpos - b * k) + "]")
+                    if ipos - a * k > 0  and jpos - b * k > 0 and ipos - a * k < 9 and jpos - b * k < 9:
+
+                        if self.polemass[ipos - a * k][jpos - b * k] != "." and self.ruleOne(ipos - a * k,
+                                                                                                 jpos - b * k) and self.polemass[ipos - a * (k+1)][jpos - b * (k+1)] == ".":
+                            enemymass.append((ipos - a * k,jpos - b * k))
+
+
+        return enemymass
+
+    def ruleOne(self, i, j):
+
+        if self.gochess == 'w':
+            if self.polemass[i][j] == 'b' or self.polemass[i][j] == 'v':
+                return True
+            else:
+                return False
+        else:
+            if self.polemass[i][j] == 'w' or self.polemass[i][j] == 'q':
+                return True
+            else:
+                return False
+
+    def ruleTwo(self, i, j):
+
+        if self.gochess == 'b':
+            if self.polemass[i][j] == 'b' or self.polemass[i][j] == 'v':
+                return True
+            else:
+                return False
+        else:
+            if self.polemass[i][j] == 'w' or self.polemass[i][j] == 'q':
+                return True
+            else:
+                return False
+    def setDamka(self, i, j):
+        if self.gochess == "w":
+            self.polemass[i][j] = "q"
+        else:
+            self.polemass[i][j] = "v"
+
+    def damkaCheckAfterEnemy(self, i, j):
+        mass = self.checkEnemy(i, j)
+        if len(mass) != 0:
+            return False
+        elif self.playerchess == "w":
+            if self.gochess == "w" and i == 0:
+                return True
+            elif self.gochess == "b" and i == 9:
+                return True
+        else:
+            if self.gochess == "b" and i == 0:
+                return True
+            elif self.gochess == "w" and i == 9:
+                return True
+
+        return False
+
+    def damkaCheckWithoutEnemy(self, i, j):
+
+        if self.playerchess == "w":
+            if self.gochess == "w" and i == 0:
+                return True
+            elif self.gochess == "b" and i == 9:
+                return True
+        else:
+            if self.gochess == "b" and i == 0:
+                return True
+            elif self.gochess == "w" and i == 9:
+                return True
+
+        return False
+
+    def hodWithEnemy(self, i, j):
+        self.ienemy = 0
+        self.jenemy = 0
+
+        if i - self.ipos < 0:
+            self.ienemy = i + 1
+            if j - self.jpos < 0:
+                self.jenemy = j + 1
+            else:
+                self.jenemy = j - 1
+        else:
+            self.ienemy = i - 1
+            if j - self.jpos > 0:
+                self.jenemy = j - 1
+            else:
+                self.jenemy = j + 1
+
+        self.polemass[i][j] = self.polemass[self.ipos][self.jpos]
+        self.polemass[self.ipos][self.jpos] = '.'
+        self.polemass[self.ienemy][self.jenemy] = '.'
+
+        self.changeNumber()
+
+    def accessHodWithEnemy(self,i,j):
+        enemymass = []
+        self.ienemy=0
+        self.jenemy=0
+        if i - self.ipos < 0:
+            self.ienemy = i + 1
+            if j - self.jpos < 0:
+                self.jenemy = j + 1
+            else:
+                self.jenemy = j - 1
+        else:
+            self.ienemy = i - 1
+            if j - self.jpos > 0:
+                self.jenemy = j - 1
+            else:
+                self.jenemy = j + 1
+
+        if self.polemass[self.ienemy][self.jenemy] == ".":
+            return []
+        for a in (2, -2):
+            for b in (2, -2):
+                try:
+                    if self.polemass[self.ipos - a][self.jpos - b] != self.gochess:
+                        enemymass.append((self.ipos - a, self.jpos - b))
+                except Exception:
+                    continue
+
+        return enemymass
+
+    def checkEnemy(self, i, j):
+        enemymass = []
+
+        for a in (1, -1):
+            for b in (1, -1):
+                try:
+                    if i - a < 0 or i - a > 9 or j - b < 0 or j - b > 9 or i - a * 2 < 0 or i - a * 2 > 9 or j - b * 2 < 0 or j - b * 2 > 9:
+                        continue
+                    if self.polemass[i - a][j - b] != '.' and self.polemass[i - a][j - b] != self.polemass[i][j] and \
+                                    self.polemass[i - a * 2][j - b * 2] == '.':
+                        enemymass.append((i - a, j - b))
+                except Exception:
+                    continue
+
+        return enemymass
+
+    def checkChessWithEnemy(self):
+        enemymass = []
+
+        for i in range(10):
+            for j in range(10):
+                if self.gochess == "w" and self.polemass[i][j] == "q":
+                    if len(self.checkEnemyForDamka(i, j)) != 0:
+                        enemymass.append((i, j))
+                        continue
+                elif self.gochess == "b" and self.polemass[i][j] == "v":
+                    if len(self.checkEnemyForDamka(i, j)) != 0:
+                        enemymass.append((i, j))
+                        continue
+                if self.polemass[i][j] == self.gochess:
+                    mass = self.checkEnemy(i, j)
+                    if len(mass) != 0:
+                        enemymass.append((i, j))
+                else:
+                    continue
+
+        return enemymass
+
+    def normalHodRule(self, ipos, jpos, i, j):
+        if self.polemass[i][j]!='.':
+            return False
+        if abs(i - ipos) == 1 and abs(j - jpos) == 1:
+            if self.playerchess == 'w':
+                if self.gochess == 'w':
+                    if (i - ipos) > 0:
+                        return False
+                    else:
+                        return True
+                elif self.gochess == 'b':
+                    if (i - ipos) < 0:
+                        return False
+                    else:
+                        return True
+            elif self.playerchess == 'b':
+                if self.gochess == 'w':
+                    if (i - ipos) < 0:
+                        return False
+                    else:
+                        return True
+                elif self.gochess == 'b':
+                    if (i - ipos) > 0:
+                        return False
+                    else:
+                        return True
+        else:
+            return False
 
     def changeNumber(self):
         """
         Изменяет количество шашек на игровом столе
         """
         print(self.playerchess)
-        if self.how_kill() == "white":
+        if self.how_kill() == "w":
             self.numberOfWhite -= 1
         else:
             self.numberOfBlack -= 1
@@ -132,12 +353,12 @@ class HahkiAPI:
         endgame = False
         if self.numberOfBlack == 0 or self.numberOfWhite == 0:
             if self.numberOfWhite == 0:
-                if self.playerchess == "white":
+                if self.playerchess == "w":
                     ishod = "lose"
                 else:
                     ishod = "win"
             elif self.numberOfBlack == 0:
-                if self.playerchess == "white":
+                if self.playerchess == "w":
                     ishod = "win"
                 else:
                     ishod = "lose"
@@ -149,34 +370,10 @@ class HahkiAPI:
         функция для распознования цвета последней сбитой шашки
         :return: цвет сбитой шишки "black" or "white"
         """
-        if self.last_kill == "black":
-            return "black"
-        elif self.last_kill == "white":
-            return "white"
-
-    def hod_with_enemy(self, mass, ipos, jpos, i, j):
-        """
-        реализует ход через врага
-        :param mass: массив с потенциальными врагами полученный вызовом функции check_enemy
-        :param ipos: 1 индекс чем ходить
-        :param jpos: 2 индекс чем ходить
-        :param i: 1 индекс куда пойдем
-        :param j: 2 индекс куда пойдем
-        :return: True если ход осуществим иначе False
-        """
-        for e in mass:
-            if self.polemass[e[0]][e[1]] == self.polemass[i][j]:
-                self.hod(ipos, jpos, i, j)
-                kletka = Hahki.Kletka(self.polemass[e[2]][e[3]].x, self.polemass[e[2]][e[3]].y, 'kletka')
-                vid = self.polemass[e[2]][e[3]].vid
-                if vid == "white":
-                    self.last_kill = "white"
-                else:
-                    self.last_kill = "black"
-                self.polemass[e[2]][e[3]] = kletka
-                return True
-
-        return False
+        if self.gochess == "b":
+            return "w"
+        elif self.gochess == "w":
+            return "b"
 
     def hod(self, ipos, jpos, i, j):
         """
@@ -187,8 +384,6 @@ class HahkiAPI:
         :param j: куда ходит 2
         :return: заполняет массив передеанный массив
         """
-        dopnow = (j * self.lengthOrWidth, i * self.lengthOrWidth)
-        dopold = (self.jpos * self.lengthOrWidth, self.ipos * self.lengthOrWidth)
         self.polemass[i][j] = self.polemass[ipos][jpos]
         self.polemass[ipos][jpos] = '.'
 
@@ -202,55 +397,10 @@ class HahkiAPI:
         """
         for i in range(10):
             for j in range(10):
-                if (j*self.lengthOrWidth < mp[0] < (j*self.lengthOrWidth + self.lengthOrWidth) and i*self.lengthOrWidth < mp[1] <
-                    (i*self.lengthOrWidth + self.lengthOrWidth)):
+                if (j * self.lengthOrWidth < mp[0] < (
+                                j * self.lengthOrWidth + self.lengthOrWidth) and i * self.lengthOrWidth < mp[1] <
+                    (i * self.lengthOrWidth + self.lengthOrWidth)):
                     return i, j
-
-    def check_hod_without_enemy(self, chess, poss):
-        """
-        проверяет можно ли сходить на передоваемую клетку по правилам
-        :param chess: данные шашки
-        :param poss: данные поля куда хочет пойти игрок
-        :return: True если на это поле можно сходить или False если нет
-        """
-
-        if chess.x != poss.x - self.lengthOrWidth and chess.x != poss.x + self.lengthOrWidth:
-            return False
-
-        elif chess.side == 'down':
-            if chess.y != poss.y + self.lengthOrWidth:
-                return False
-            else:
-                return True
-        elif chess.side == 'up':
-            if chess.y != poss.y - self.lengthOrWidth:
-                return False
-            else:
-                return True
-
-    def check_enemy(self, chess, ipos, jpos):
-        """
-        проверяет наличие вражеской пешки в зоне досягаемости c озможностью её срубить
-        :param chess: данные о шашке которой будут ходить
-        :param ipos: первый индекс chess в mass
-        :param jpos: второй индекс chess в mass
-        :return: массив touple со всеми возможными врагами состоящий из/
-                (1 индекс в mass поля для сруба, 2 индекс в mass для для сруба, 1 индекс врага, 2 индекс врага,(ipos,jpos))
-        """
-        enemymass = []
-        for i in (1, -1):
-            for j in (1, -1):
-                if ipos + i < 0 or ipos + i > 9 or jpos + j < 0 or jpos + j > 9:
-                    continue
-
-                elif self.polemass[ipos + i][jpos + j].vid != 'kletka':
-                    if self.polemass[ipos + i][jpos + j].vid != chess.vid:
-                        if ipos + 2 * i < 0 or ipos + 2 * i > 9 or jpos + 2 * j < 0 or jpos + 2 * j > 9:
-                            continue
-                        elif self.polemass[ipos + 2 * i][jpos + 2 * j].vid == 'kletka':
-                            enemymass.append((ipos + 2 * i, jpos + 2 * j, ipos + i, jpos + j, (ipos, jpos)))
-
-        return enemymass
 
     def startpos(self, side='down'):
         """
@@ -260,13 +410,13 @@ class HahkiAPI:
         """
 
         if side == 'down':
-            self.polemass =[
+            self.polemass = [
                 list(' b b b b b'),
                 list('b b b b b '),
                 list(' b b b b b'),
                 list('b b b b b '),
                 list(' . . . . .'),
-                list('. . . . . '),
+                list('. . b . . '),
                 list(' w w w w w'),
                 list('w w w w w '),
                 list(' w w w w w'),
@@ -287,63 +437,10 @@ class HahkiAPI:
                 list('b b b b b '),
             ]
 
-    def check_chess_with_enemy(self, gocolor):
-        """
-        оставляет массив с возможными клетками которыми можно сходить срубив врага
-        :param gocolor: цвет шашек которыми будут ходить
-        :return: массив результатов функции check_enemy()
-        """
-        arraychess = []
-        for i in range(10):
-            for j in range(10):
-                if self.polemass[i][j].vid == 'kletka' or self.polemass[i][j].vid != gocolor:
-                    continue
-                else:
-                    arraychess.append(self.check_enemy(self.polemass[i][j], i, j))
-        return arraychess
+    def changeGoChess(self):
+        if self.gochess == 'w':
+            self.gochess = 'b'
+        else:
+            self.gochess = 'w'
 
-    def check_correct_chess(self, corrrectdatamass, chess):
-        """
-        проверяет на правельность хода если есть что рубить
-        :param corrrectdatamass: массив с данными шашек которые могут ходить полученный из вызова функции check_chess_with_enemy
-        :param chess: шашка которой будут ходить
-        :return: True если можно сходить иначе False
-        """
-        fl = True
-        for f in corrrectdatamass:
-            if len(f) == 0:
-                continue
-            for e in f:
-                fl = False
-                if self.polemass[e[4][0]][e[4][1]] == chess:
-                    return True
-        return fl
 
-    def check_correct_damka_hod(self, chess, poss):
-        """
-            проверяет на правельность хода если шашка дамка
-            :param chess: данные передвигаемой шашки
-            :param poss: данные клетки на которую юудет поизводится движение
-            :return True если можно сходить иначе False
-        """
-        if chess.x != poss.x - self.lengthOrWidth and chess.x != poss.x + self.lengthOrWidth:
-            return False
-
-        elif chess.side == 'down':
-            if chess.y != poss.y + self.lengthOrWidth and chess.y != poss.y - self.lengthOrWidth:
-                return False
-        return True
-
-    def set_damka(self, i, j):
-        """
-            устонавливает шашку дамкой
-            :param i: первый индекс меняемой шашки в массиве polemass
-            :param j: второй индекс меняемой шашки в массиве polemass
-            :return: ничего
-            """
-        if i == 0 or i == 9:
-            self.polemass[i][j].damka = True
-            if self.polemass[i][j].vid == 'black':
-                self.polemass[i][j].updatebitmap(self.i_db)
-            else:
-                self.polemass[i][j].updatebitmap(self.i_dw)

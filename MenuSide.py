@@ -15,11 +15,11 @@ class MenuSide(Menu):
         exit = 2
         if self.punkt == white:
             self.done = False
-            return "white"
+            return "w"
 
         if self.punkt == black:
             self.done = False
-            return "black"
+            return "b"
 
         elif self.punkt == exit:
             sys.exit()
