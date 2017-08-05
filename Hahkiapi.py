@@ -6,7 +6,7 @@ class HahkiAPI:
         self.last_kill = "kletka"
 
         self.side = 'up'
-        self.playerchess = 'b'
+        self.playerchess = 'w'
         self.gochess = 'w'
         self.AI = False
 
@@ -141,7 +141,7 @@ class HahkiAPI:
         for k in range(9):
             for a in (1, -1):
                 for b in (1, -1):
-                    print('[' + str(ipos - a * k) + "][" + str(jpos - b * k) + "]")
+                    #print('[' + str(ipos - a * k) + "][" + str(jpos - b * k) + "]")
                     if ipos - a * k > 0  and jpos - b * k > 0 and ipos - a * k < 9 and jpos - b * k < 9:
 
                         if self.polemass[ipos - a * k][jpos - b * k] != "." and self.ruleOne(ipos - a * k,
@@ -186,18 +186,8 @@ class HahkiAPI:
         mass = self.checkEnemy(i, j)
         if len(mass) != 0:
             return False
-        elif self.playerchess == "w":
-            if self.gochess == "w" and i == 0:
-                return True
-            elif self.gochess == "b" and i == 9:
-                return True
         else:
-            if self.gochess == "b" and i == 0:
-                return True
-            elif self.gochess == "w" and i == 9:
-                return True
-
-        return False
+            return self.damkaCheckWithoutEnemy(i,j)
 
     def damkaCheckWithoutEnemy(self, i, j):
 
@@ -382,7 +372,6 @@ class HahkiAPI:
         :param jpos: начальная позиция 2
         :param i: куда ходит 1
         :param j: куда ходит 2
-        :return: заполняет массив передеанный массив
         """
         self.polemass[i][j] = self.polemass[ipos][jpos]
         self.polemass[ipos][jpos] = '.'
@@ -411,17 +400,17 @@ class HahkiAPI:
 
         if side == 'down':
             self.polemass = [
-                list(' b b b b b'),
-                list('b b b b b '),
-                list(' b b b b b'),
-                list('b b b b b '),
-                list(' . . . . .'),
-                list('. . b . . '),
-                list(' w w w w w'),
-                list('w w w w w '),
-                list(' w w w w w'),
-                list('w w w w w '),
-            ]
+            list(' . . . b .'),
+            list('. . . w . '),
+            list(' . . . . .'),
+            list('. . . . . '),
+            list(' . . . . .'),
+            list('. . . . . '),
+            list(' . . . . .'),
+            list('. b . . . '),
+            list(' w . . . .'),
+            list('. . . . . '),
+        ]
 
         elif side == 'up':
             self.polemass = [
