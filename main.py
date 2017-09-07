@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import endMenu
 from Hahkiapi import HahkiAPI
 from MainMenu import MainMenu
@@ -17,7 +16,7 @@ game_type, selectchess = mainMenu.run()
 if game_type == "AI":
     game.AI = True
 
-game.playerchess = selectchess
+game.playerDraughts = selectchess
 
 gameGUI.set_start_position()
 
@@ -25,7 +24,7 @@ done = True
 
 while done:
 
-    endgame, gameresult = game.endGame()
+    endgame, gameresult = game.check_end_game()
     if endgame:
         endMenu = endMenu.EndMenu()
         endMenu.run(gameresult)

@@ -13,9 +13,9 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_hodWithEnemyForDamka(self):
-        self.game.ipos=0
-        self.game.jpos=9
-        self.game.polemass = [
+        self.game.iFirstActivePosition=0
+        self.game.jFirstActivePosition=9
+        self.game.gameField = [
             list(' . . . . q'),
             list('. . . b . '),
             list(' . . . . .'),
@@ -41,13 +41,13 @@ class TestHahkiAPI(TestCase):
             list(' w w w w w'),
             list('w w w w w '),
         ]
-        self.game.hodWithEnemyForDamka(2, 5)
-        self.assertEqual(self.game.polemass, accesmass)
+        self.game.hod_with_enemy_for_king(2, 5)
+        self.assertEqual(self.game.gameField, accesmass)
         #For black damka
-        self.game.ipos = 2
-        self.game.jpos = 5
+        self.game.iFirstActivePosition = 2
+        self.game.jFirstActivePosition = 5
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . . .'),
             list('. . . w . '),
             list(' . . v . .'),
@@ -72,18 +72,18 @@ class TestHahkiAPI(TestCase):
             list(' w w w w w'),
             list('w w w w w '),
         ]
-        self.game.hodWithEnemyForDamka(0, 7)
-        self.assertEqual(self.game.polemass, accesmassForBlack)
+        self.game.hod_with_enemy_for_king(0, 7)
+        self.assertEqual(self.game.gameField, accesmassForBlack)
 
     def test_accesHodForDamka(self):
-        self.game.ipos = 2
-        self.game.jpos = 5
+        self.game.iFirstActivePosition = 2
+        self.game.jFirstActivePosition = 5
 
-        self.game.gochess ='b'
-        self.game.playerchess = 'w'
+        self.game.playDraughts = 'b'
+        self.game.playerDraughts = 'w'
 
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . . .'),
             list('. . . w . '),
             list(' . . v . .'),
@@ -96,12 +96,12 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.accesHodForDamka(0, 7))
+        self.assertTrue(self.game.correct_hod_for_king(0, 7))
 
-        self.game.ipos = 0
-        self.game.jpos = 7
+        self.game.iFirstActivePosition = 0
+        self.game.jFirstActivePosition = 7
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . v .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -114,12 +114,12 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.accesHodForDamka(2, 5))
+        self.assertTrue(self.game.correct_hod_for_king(2, 5))
 
-        self.game.ipos = 4
-        self.game.jpos = 3
+        self.game.iFirstActivePosition = 4
+        self.game.jFirstActivePosition = 3
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . . .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -132,15 +132,15 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.accesHodForDamka(0, 7))
+        self.assertTrue(self.game.correct_hod_for_king(0, 7))
 
     def test_checkEnemyForDamka(self):
         None
 
     def test_ruleOne(self):
-        self.game.gochess = "w"
+        self.game.playDraughts = "w"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' b v . . .'),
             list('. . . . . '),
             list(' . . . . .'),
@@ -153,12 +153,12 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleOne(0,1))
-        self.assertTrue(self.game.ruleOne(0,3))
+        self.assertTrue(self.game.enemy_or_not(0, 1))
+        self.assertTrue(self.game.enemy_or_not(0, 3))
 
-        self.game.gochess = "b"
+        self.game.playDraughts = "b"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . v . . .'),
             list('q w . . . '),
             list(' . . . . .'),
@@ -171,14 +171,14 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleOne(1, 0))
-        self.assertTrue(self.game.ruleOne(1, 2))
+        self.assertTrue(self.game.enemy_or_not(1, 0))
+        self.assertTrue(self.game.enemy_or_not(1, 2))
 
 
     def test_ruleTwo(self):
-        self.game.gochess = "b"
+        self.game.playDraughts = "b"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' b v . . .'),
             list('. . . . . '),
             list(' . . . . .'),
@@ -191,12 +191,12 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleTwo(0, 1))
-        self.assertTrue(self.game.ruleTwo(0, 3))
+        self.assertTrue(self.game.friend_or_not(0, 1))
+        self.assertTrue(self.game.friend_or_not(0, 3))
 
-        self.game.gochess = "w"
+        self.game.playDraughts = "w"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . v . . .'),
             list('q w . . . '),
             list(' . . . . .'),
@@ -209,23 +209,23 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleTwo(1, 0))
-        self.assertTrue(self.game.ruleTwo(1, 2))
+        self.assertTrue(self.game.friend_or_not(1, 0))
+        self.assertTrue(self.game.friend_or_not(1, 2))
 
     def test_setDamka(self):
-        self.game.gochess = 'w'
-        self.game.setDamka(0,1)
-        self.assertEqual(self.game.polemass[0][1], 'q')
+        self.game.playDraughts = 'w'
+        self.game.set_king(0, 1)
+        self.assertEqual(self.game.gameField[0][1], 'q')
 
-        self.game.gochess = 'b'
-        self.game.setDamka(0, 1)
-        self.assertEqual(self.game.polemass[0][1], 'v')
+        self.game.playDraughts = 'b'
+        self.game.set_king(0, 1)
+        self.assertEqual(self.game.gameField[0][1], 'v')
 
     def test_damkaCheckAfterEnemy(self):
-        self.game.gochess = "w"
-        self.game.playerchess = "w"
+        self.game.playDraughts = "w"
+        self.game.playerDraughts = "w"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . w . w .'),
             list('. . . b . '),
             list(' . . . b .'),
@@ -238,10 +238,10 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertFalse(self.game.damkaCheckAfterEnemy(0,7))
-        self.assertTrue(self.game.damkaCheckAfterEnemy(0,3))
+        self.assertFalse(self.game.king_check_after_enemy(0, 7))
+        self.assertTrue(self.game.king_check_after_enemy(0, 3))
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . w . w .'),
             list('. . . . . '),
             list(' . . . b .'),
@@ -254,13 +254,13 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.assertTrue(self.game.damkaCheckAfterEnemy(0, 7))
-        self.assertTrue(self.game.damkaCheckAfterEnemy(0, 3))
+        self.assertTrue(self.game.king_check_after_enemy(0, 7))
+        self.assertTrue(self.game.king_check_after_enemy(0, 3))
 
-        self.game.gochess = "b"
-        self.game.playerchess = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' b . . b .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -273,14 +273,14 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.assertFalse(self.game.damkaCheckAfterEnemy(0, 7))
-        self.assertTrue(self.game.damkaCheckAfterEnemy(0, 1))
+        self.assertFalse(self.game.king_check_after_enemy(0, 7))
+        self.assertTrue(self.game.king_check_after_enemy(0, 1))
 
     def test_damkaCheckWithoutEnemy(self):
-        self.game.gochess = "b"
-        self.game.playerchess = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' b . . b .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -293,20 +293,20 @@ class TestHahkiAPI(TestCase):
             list('b . . . . '),
         ]
 
-        self.assertTrue(self.game.damkaCheckWithoutEnemy(0, 1))
-        self.assertFalse(self.game.damkaCheckWithoutEnemy(9, 0))
+        self.assertTrue(self.game.king_check_without_enemy(0, 1))
+        self.assertFalse(self.game.king_check_without_enemy(9, 0))
 
-        self.game.playerchess='w'
-        self.assertTrue(self.game.damkaCheckWithoutEnemy(9, 0))
+        self.game.playerDraughts= 'w'
+        self.assertTrue(self.game.king_check_without_enemy(9, 0))
 
     def test_hodWithEnemy(self):
-        self.game.gochess = "b"
-        self.game.playerchess = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
-        self.game.ipos = 0
-        self.game.jpos = 7
+        self.game.iFirstActivePosition = 0
+        self.game.jFirstActivePosition = 7
 
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . b .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -319,24 +319,24 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.game.hodWithEnemy(2, 5)
-        self.assertTrue(self.game.polemass[2][5]=='b')
-        self.assertTrue(self.game.polemass[1][6]=='.')
-        self.assertTrue(self.game.polemass[0][7]=='.')
+        self.game.step_with_enemy(2, 5)
+        self.assertTrue(self.game.gameField[2][5] == 'b')
+        self.assertTrue(self.game.gameField[1][6] == '.')
+        self.assertTrue(self.game.gameField[0][7] == '.')
 
-        self.game.ipos=8
-        self.game.jpos=1
+        self.game.iFirstActivePosition=8
+        self.game.jFirstActivePosition=1
 
-        self.game.hodWithEnemy(6, 3)
-        self.assertTrue(self.game.polemass[6][3] == 'w')
-        self.assertTrue(self.game.polemass[7][2] == '.')
-        self.assertTrue(self.game.polemass[8][1] == '.')
+        self.game.step_with_enemy(6, 3)
+        self.assertTrue(self.game.gameField[6][3] == 'w')
+        self.assertTrue(self.game.gameField[7][2] == '.')
+        self.assertTrue(self.game.gameField[8][1] == '.')
 
     def test_accessHodWithEnemy(self):
         None
 
     def test_checkEnemy(self):
-        self.game.polemass = [
+        self.game.gameField = [
             list(' . . . b .'),
             list('. . . w . '),
             list(' . . . . .'),
@@ -349,12 +349,12 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.assertEqual(self.game.checkEnemy(0, 7), [(1, 6)])
-        self.assertEqual(self.game.checkEnemy(6, 3), [(5, 2), (5, 4)])
+        self.assertEqual(self.game.check_enemy(0, 7), [(1, 6)])
+        self.assertEqual(self.game.check_enemy(6, 3), [(5, 2), (5, 4)])
 
     def test_checkChessWithEnemy(self):
-        self.game.gochess = "b"
-        self.game.polemass = [
+        self.game.playDraughts = "b"
+        self.game.gameField = [
             list(' . b . v .'),
             list('. w . . . '),
             list(' . . w . .'),
@@ -367,12 +367,12 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.assertEqual(self.game.checkChessWithEnemy(),[(0,3), (0, 7), (5, 4)])
+        self.assertEqual(self.game.check_chess_with_enemy(), [(0, 3), (0, 7), (5, 4)])
 
     def test_normalHodRule(self):
-        self.game.playerchess = "w"
-        self.game.gochess = "w"
-        self.game.polemass = [
+        self.game.playerDraughts = "w"
+        self.game.playDraughts = "w"
+        self.game.gameField = [
             list(' . b . v .'),
             list('. w . . . '),
             list(' . . w . .'),
@@ -385,33 +385,33 @@ class TestHahkiAPI(TestCase):
             list('. . . . . '),
         ]
 
-        self.assertTrue(self.game.normalHodRule(2,5,1,6))
-        self.assertFalse(self.game.normalHodRule(2,5,3,6))
-        self.assertFalse(self.game.normalHodRule(2,5,3,5))
-        self.assertFalse(self.game.normalHodRule(1,2,0,3))
-        self.assertFalse(self.game.normalHodRule(2,5,4,3))
+        self.assertTrue(self.game.normal_step_rule(2, 5, 1, 6))
+        self.assertFalse(self.game.normal_step_rule(2, 5, 3, 6))
+        self.assertFalse(self.game.normal_step_rule(2, 5, 3, 5))
+        self.assertFalse(self.game.normal_step_rule(1, 2, 0, 3))
+        self.assertFalse(self.game.normal_step_rule(2, 5, 4, 3))
 
     def test_changeNumber(self):
-        self.game.gochess='w'
-        self.game.changeNumber()
+        self.game.playDraughts= 'w'
+        self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfBlack,19)
-        self.game.changeNumber()
+        self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfBlack, 18)
-        self.game.gochess = 'b'
-        self.game.changeNumber()
+        self.game.playDraughts = 'b'
+        self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfWhite, 19)
 
     def test_endGame(self):
         None
 
     def test_how_kill(self):
-        self.game.gochess = "w"
-        self.assertEqual(self.game.how_kill(), "b")
-        self.game.gochess = "b"
-        self.assertEqual(self.game.how_kill(), "w")
+        self.game.playDraughts = "w"
+        self.assertEqual(self.game.who_was_killed(), "b")
+        self.game.playDraughts = "b"
+        self.assertEqual(self.game.who_was_killed(), "w")
 
     def test_hod(self):
-        self.game.polemass = [
+        self.game.gameField = [
             list(' b . . v .'),
             list('. . . . . '),
             list(' . . w . .'),
@@ -423,9 +423,9 @@ class TestHahkiAPI(TestCase):
             list(' . . b . b'),
             list('. . . . . '),
         ]
-        self.game.hod(0,1,1,2)
-        self.assertEqual(self.game.polemass[0][1], '.')
-        self.assertEqual(self.game.polemass[1][2], 'b')
+        self.game.simple_step(0, 1, 1, 2)
+        self.assertEqual(self.game.gameField[0][1], '.')
+        self.assertEqual(self.game.gameField[1][2], 'b')
 
     def test_checkchess(self):
         None
@@ -434,10 +434,10 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_changeGoChess(self):
-        self.game.gochess='w'
-        self.game.changeGoChess()
-        self.assertEqual(self.game.gochess,'b')
+        self.game.playDraughts= 'w'
+        self.game.change_godraught()
+        self.assertEqual(self.game.playDraughts, 'b')
 
-        self.game.gochess = 'b'
-        self.game.changeGoChess()
-        self.assertEqual(self.game.gochess, 'w')
+        self.game.playDraughts = 'b'
+        self.game.change_godraught()
+        self.assertEqual(self.game.playDraughts, 'w')

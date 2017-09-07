@@ -61,9 +61,9 @@ class GameGUI:
         устонавливет сартовую позицию
         """
         if self.logic.playerchess == "b":
-            self.logic.startpos("up")
+            self.logic.set_start_playing_field("up")
         else:
-            self.logic.startpos("down")
+            self.logic.set_start_playing_field("down")
 
     def changeNumberRender(self):
         """

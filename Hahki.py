@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 class Kletka:
     def __init__(self, xpos, ypos, vid='kletka'):
         self.x = xpos
