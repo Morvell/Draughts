@@ -79,8 +79,8 @@ class TestHahkiAPI(TestCase):
         self.game.iFirstActivePosition = 2
         self.game.jFirstActivePosition = 5
 
-        self.game.playDraught = 'b'
-        self.game.playerDraught = 'w'
+        self.game.playDraughts = 'b'
+        self.game.playerDraughts = 'w'
 
 
         self.game.gameField = [
@@ -138,7 +138,7 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_ruleOne(self):
-        self.game.playDraught = "w"
+        self.game.playDraughts = "w"
 
         self.game.gameField = [
             list(' b v . . .'),
@@ -153,10 +153,10 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleOne(0,1))
-        self.assertTrue(self.game.ruleOne(0,3))
+        self.assertTrue(self.game.enemy_or_not(0, 1))
+        self.assertTrue(self.game.enemy_or_not(0, 3))
 
-        self.game.playDraught = "b"
+        self.game.playDraughts = "b"
 
         self.game.gameField = [
             list(' . v . . .'),
@@ -171,12 +171,12 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleOne(1, 0))
-        self.assertTrue(self.game.ruleOne(1, 2))
+        self.assertTrue(self.game.enemy_or_not(1, 0))
+        self.assertTrue(self.game.enemy_or_not(1, 2))
 
 
     def test_ruleTwo(self):
-        self.game.playDraught = "b"
+        self.game.playDraughts = "b"
 
         self.game.gameField = [
             list(' b v . . .'),
@@ -191,10 +191,10 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleTwo(0, 1))
-        self.assertTrue(self.game.ruleTwo(0, 3))
+        self.assertTrue(self.game.friend_or_not(0, 1))
+        self.assertTrue(self.game.friend_or_not(0, 3))
 
-        self.game.playDraught = "w"
+        self.game.playDraughts = "w"
 
         self.game.gameField = [
             list(' . v . . .'),
@@ -209,21 +209,21 @@ class TestHahkiAPI(TestCase):
             list('w w w w w '),
         ]
 
-        self.assertTrue(self.game.ruleTwo(1, 0))
-        self.assertTrue(self.game.ruleTwo(1, 2))
+        self.assertTrue(self.game.friend_or_not(1, 0))
+        self.assertTrue(self.game.friend_or_not(1, 2))
 
     def test_setDamka(self):
-        self.game.playDraught = 'w'
+        self.game.playDraughts = 'w'
         self.game.set_king(0, 1)
         self.assertEqual(self.game.gameField[0][1], 'q')
 
-        self.game.playDraught = 'b'
+        self.game.playDraughts = 'b'
         self.game.set_king(0, 1)
         self.assertEqual(self.game.gameField[0][1], 'v')
 
     def test_damkaCheckAfterEnemy(self):
-        self.game.playDraught = "w"
-        self.game.playerDraught = "w"
+        self.game.playDraughts = "w"
+        self.game.playerDraughts = "w"
 
         self.game.gameField = [
             list(' . w . w .'),
@@ -257,8 +257,8 @@ class TestHahkiAPI(TestCase):
         self.assertTrue(self.game.king_check_after_enemy(0, 7))
         self.assertTrue(self.game.king_check_after_enemy(0, 3))
 
-        self.game.playDraught = "b"
-        self.game.playerDraught = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
         self.game.gameField = [
             list(' b . . b .'),
@@ -277,8 +277,8 @@ class TestHahkiAPI(TestCase):
         self.assertTrue(self.game.king_check_after_enemy(0, 1))
 
     def test_damkaCheckWithoutEnemy(self):
-        self.game.playDraught = "b"
-        self.game.playerDraught = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
         self.game.gameField = [
             list(' b . . b .'),
@@ -296,12 +296,12 @@ class TestHahkiAPI(TestCase):
         self.assertTrue(self.game.king_check_without_enemy(0, 1))
         self.assertFalse(self.game.king_check_without_enemy(9, 0))
 
-        self.game.playerDraught= 'w'
+        self.game.playerDraughts= 'w'
         self.assertTrue(self.game.king_check_without_enemy(9, 0))
 
     def test_hodWithEnemy(self):
-        self.game.playDraught = "b"
-        self.game.playerDraught = "b"
+        self.game.playDraughts = "b"
+        self.game.playerDraughts = "b"
 
         self.game.iFirstActivePosition = 0
         self.game.jFirstActivePosition = 7
@@ -353,7 +353,7 @@ class TestHahkiAPI(TestCase):
         self.assertEqual(self.game.check_enemy(6, 3), [(5, 2), (5, 4)])
 
     def test_checkChessWithEnemy(self):
-        self.game.playDraught = "b"
+        self.game.playDraughts = "b"
         self.game.gameField = [
             list(' . b . v .'),
             list('. w . . . '),
@@ -370,8 +370,8 @@ class TestHahkiAPI(TestCase):
         self.assertEqual(self.game.check_chess_with_enemy(), [(0, 3), (0, 7), (5, 4)])
 
     def test_normalHodRule(self):
-        self.game.playerDraught = "w"
-        self.game.playDraught = "w"
+        self.game.playerDraughts = "w"
+        self.game.playDraughts = "w"
         self.game.gameField = [
             list(' . b . v .'),
             list('. w . . . '),
@@ -392,12 +392,12 @@ class TestHahkiAPI(TestCase):
         self.assertFalse(self.game.normal_step_rule(2, 5, 4, 3))
 
     def test_changeNumber(self):
-        self.game.playDraught= 'w'
+        self.game.playDraughts= 'w'
         self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfBlack,19)
         self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfBlack, 18)
-        self.game.playDraught = 'b'
+        self.game.playDraughts = 'b'
         self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfWhite, 19)
 
@@ -405,9 +405,9 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_how_kill(self):
-        self.game.playDraught = "w"
+        self.game.playDraughts = "w"
         self.assertEqual(self.game.who_was_killed(), "b")
-        self.game.playDraught = "b"
+        self.game.playDraughts = "b"
         self.assertEqual(self.game.who_was_killed(), "w")
 
     def test_hod(self):
@@ -434,10 +434,10 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_changeGoChess(self):
-        self.game.playDraught= 'w'
+        self.game.playDraughts= 'w'
         self.game.change_godraught()
-        self.assertEqual(self.game.playDraught, 'b')
+        self.assertEqual(self.game.playDraughts, 'b')
 
-        self.game.playDraught = 'b'
+        self.game.playDraughts = 'b'
         self.game.change_godraught()
-        self.assertEqual(self.game.playDraught, 'w')
+        self.assertEqual(self.game.playDraughts, 'w')

@@ -15,8 +15,8 @@ class HahkiAPI:
         self.lastKill = self.GAME_PIECE
 
         self.gameSide = self.SIDE_UP
-        self.playerDraught = self.WHITE_DRAUGHT
-        self.playDraught = self.WHITE_DRAUGHT
+        self.playerDraughts = self.WHITE_DRAUGHT
+        self.playDraughts = self.WHITE_DRAUGHT
         self.AI = False
 
         self.gameField = []
@@ -33,11 +33,11 @@ class HahkiAPI:
 
     def without_net(self, mp):
         """
-        Основная логика программы
+        Распределяет на игру с ии и без
         :param mp: координаты мышки
         """
 
-        if self.AI and self.playDraught != self.playerDraught:
+        if self.AI and self.playDraughts != self.playerDraughts:
             for i in range(10):
                 for j in range(10):
                     self.game_logic(i, j)
@@ -46,6 +46,11 @@ class HahkiAPI:
             self.game_logic(i, j)
 
     def game_logic(self, i, j):
+        """
+        обработка всех игровых событий
+        :param i: первый индекс массива
+        :param j: второй индекс массива
+        """
         # проверка что бы не ходил на пустую клетку
         if self.gameField[i][j] == self.GAME_PIECE:
             return
@@ -81,7 +86,7 @@ class HahkiAPI:
             else:
                 return
 
-        if self.ruleTwo(i, j):
+        if self.friend_or_not(i, j):
             self.iFirstActivePosition = i
             self.jFirstActivePosition = j
             self.continueStep = True
@@ -93,12 +98,17 @@ class HahkiAPI:
 
         elif self.continueStep and self.normal_step_rule(self.iFirstActivePosition, self.jFirstActivePosition, i, j):
             self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
-            if self.king_check_without_enemy(i, j):
+            if self.king_check_without_enemy(i):
                 self.set_king(i, j)
             self.continueStep = False
             self.change_godraught()
 
     def hod_with_enemy_for_king(self, i, j):
+        """
+        реализация хода для короля
+        :param i: первая позиция для хода
+        :param j: вторая позиция для хода
+        """
         self.i_enemy_position = 0
         self.j_enemy_position = 0
 
@@ -120,6 +130,12 @@ class HahkiAPI:
         self.gameField[self.i_enemy_position][self.j_enemy_position] = self.GAME_PIECE
 
     def correct_hod_for_king(self, i, j):
+        """
+        проверка правельности хода для короля
+        :param i: первая позиция выбранной шашки
+        :param j: вторая позиция выбранной шашки
+        :return: True or False
+        """
         mass = self.check_enemy_for_king(self.iFirstActivePosition, self.jFirstActivePosition)
         self.i_enemy_position = 0
         self.j_enemy_position = 0
@@ -143,6 +159,10 @@ class HahkiAPI:
             return False
 
     def king_or_not_king(self):
+        """
+        Проверка на короля
+        :return: True or False
+        """
         if self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] == self.WHITE_KING or \
                         self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] == self.BLACK_KING:
             return True
@@ -150,6 +170,12 @@ class HahkiAPI:
             return False
 
     def check_enemy_for_king(self, i, j):
+        """
+        Нахождение врагов для короля
+        :param i: первая позиция выбранной шашки
+        :param j: вторая позиция выбранной шашки
+        :return: массив с позициями возможных врагов
+        """
         i_first_position = i
         j_first_position = j
         enemy_array = []
@@ -159,7 +185,7 @@ class HahkiAPI:
                     # print('[' + str(iFirstActivePosition - a * k) + "][" + str(jFirstActivePosition - b * k) + "]")
                     if i_first_position - a * k > 0 and j_first_position - b * k > 0 and i_first_position - a * k < 9 and j_first_position - b * k < 9:
 
-                        if self.gameField[i_first_position - a * k][j_first_position - b * k] != "." and self.ruleOne(
+                        if self.gameField[i_first_position - a * k][j_first_position - b * k] != "." and self.enemy_or_not(
                                         i_first_position - a * k,
                                         j_first_position - b * k) and \
                                         self.gameField[i_first_position - a * (k + 1)][
@@ -168,9 +194,14 @@ class HahkiAPI:
 
         return enemy_array
 
-    def ruleOne(self, i, j):
-
-        if self.playDraught == 'w':
+    def enemy_or_not(self, i, j):
+        """
+        проверка на врага
+        :param i: первая позиция проверяемой шишки
+        :param j: вторая позиция проверяемой шашки
+        :return: True or False
+        """
+        if self.playDraughts == 'w':
             if self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v':
                 return True
             else:
@@ -181,9 +212,14 @@ class HahkiAPI:
             else:
                 return False
 
-    def ruleTwo(self, i, j):
-
-        if self.playDraught == 'b':
+    def friend_or_not(self, i, j):
+        """
+        Проверка на друга
+        :param i: первая позиция проверяемой шашки
+        :param j: вторая позиция проверяемой шашки
+        :return: True or False
+        """
+        if self.playDraughts == 'b':
             if self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v':
                 return True
             else:
@@ -195,34 +231,54 @@ class HahkiAPI:
                 return False
 
     def set_king(self, i, j):
-        if self.playDraught == "w":
+        """
+        Установка короля в массиве поля
+        :param i: первая позиция замеяемой шашки
+        :param j: вторая позиция заменяемой шашки
+        """
+        if self.playDraughts == "w":
             self.gameField[i][j] = "q"
         else:
             self.gameField[i][j] = "v"
 
     def king_check_after_enemy(self, i, j):
+        """
+        проверка на возможность замены на короля после срубания шашки
+        :param i: первая позиция проверяемой шашки
+        :param j: вторая позиция проверяемой шашки
+        :return: True or False
+        """
         mass = self.check_enemy(i, j)
         if len(mass) != 0:
             return False
         else:
-            return self.king_check_without_enemy(i, j)
+            return self.king_check_without_enemy(i)
 
-    def king_check_without_enemy(self, i, j):
-
-        if self.playerDraught == "w":
-            if self.playDraught == "w" and i == 0:
+    def king_check_without_enemy(self, i):
+        """
+        проверка на возможность замены на короля после простого хода
+        :param i: позиция шашки по горизонтали
+        :return: True or False
+        """
+        if self.playerDraughts == "w":
+            if self.playDraughts == "w" and i == 0:
                 return True
-            elif self.playDraught == "b" and i == 9:
+            elif self.playDraughts == "b" and i == 9:
                 return True
         else:
-            if self.playDraught == "b" and i == 0:
+            if self.playDraughts == "b" and i == 0:
                 return True
-            elif self.playDraught == "w" and i == 9:
+            elif self.playDraughts == "w" and i == 9:
                 return True
 
         return False
 
     def step_with_enemy(self, i, j):
+        """
+        реализация хода через врага
+        :param i: первая позиция куда ходить
+        :param j: вторая позиция куда ходить
+        """
         self.i_enemy_position = 0
         self.j_enemy_position = 0
 
@@ -246,6 +302,9 @@ class HahkiAPI:
         self.change_number_of_live_draughts()
 
     def correct_step_with_enemy(self, i, j):
+        """
+        выдает массив с нужными врагами
+        """
         enemy_array = []
         self.i_enemy_position = 0
         self.j_enemy_position = 0
@@ -267,7 +326,7 @@ class HahkiAPI:
         for a in (2, -2):
             for b in (2, -2):
                 try:
-                    if self.gameField[self.iFirstActivePosition - a][self.jFirstActivePosition - b] != self.playDraught:
+                    if self.gameField[self.iFirstActivePosition - a][self.jFirstActivePosition - b] != self.playDraughts:
                         enemy_array.append((self.iFirstActivePosition - a, self.jFirstActivePosition - b))
                 except Exception:
                     continue
@@ -275,6 +334,12 @@ class HahkiAPI:
         return enemy_array
 
     def check_enemy(self, i, j):
+        """
+        находит всех врагов
+        :param i: первая позиция проверяемой шашки
+        :param j: вторая позиция проверяемой шашки
+        :return: массив с врагами
+        """
         enemy_array = []
 
         for a in (1, -1):
@@ -291,19 +356,23 @@ class HahkiAPI:
         return enemy_array
 
     def check_chess_with_enemy(self):
+        """
+        нахождение всех шашек с врагами
+        :return: массив шашек с врагами
+        """
         enemy_array = []
 
         for i in range(10):
             for j in range(10):
-                if self.playDraught == "w" and self.gameField[i][j] == "q":
+                if self.playDraughts == "w" and self.gameField[i][j] == "q":
                     if len(self.check_enemy_for_king(i, j)) != 0:
                         enemy_array.append((i, j))
                         continue
-                elif self.playDraught == "b" and self.gameField[i][j] == "v":
+                elif self.playDraughts == "b" and self.gameField[i][j] == "v":
                     if len(self.check_enemy_for_king(i, j)) != 0:
                         enemy_array.append((i, j))
                         continue
-                if self.gameField[i][j] == self.playDraught:
+                if self.gameField[i][j] == self.playDraughts:
                     mass = self.check_enemy(i, j)
                     if len(mass) != 0:
                         enemy_array.append((i, j))
@@ -313,27 +382,35 @@ class HahkiAPI:
         return enemy_array
 
     def normal_step_rule(self, i_first_position, j_first_position, i, j):
+        """
+        Проверка на правельность простого хода
+        :param i_first_position: первая позиция чем ходят
+        :param j_first_position: вторая позиция чем ходят
+        :param i: первая позиция куда пойдут
+        :param j: вторая позиция куда пойдут
+        :return: True or False
+        """
         if self.gameField[i][j] != '.':
             return False
         if abs(i - i_first_position) == 1 and abs(j - j_first_position) == 1:
-            if self.playerDraught == 'w':
-                if self.playDraught == 'w':
+            if self.playerDraughts == 'w':
+                if self.playDraughts == 'w':
                     if (i - i_first_position) > 0:
                         return False
                     else:
                         return True
-                elif self.playDraught == 'b':
+                elif self.playDraughts == 'b':
                     if (i - i_first_position) < 0:
                         return False
                     else:
                         return True
-            elif self.playerDraught == 'b':
-                if self.playDraught == 'w':
+            elif self.playerDraughts == 'b':
+                if self.playDraughts == 'w':
                     if (i - i_first_position) < 0:
                         return False
                     else:
                         return True
-                elif self.playDraught == 'b':
+                elif self.playDraughts == 'b':
                     if (i - i_first_position) > 0:
                         return False
                     else:
@@ -345,7 +422,7 @@ class HahkiAPI:
         """
         Изменяет количество шашек на игровом столе
         """
-        print(self.playerDraught)
+        print(self.playerDraughts)
         if self.who_was_killed() == "w":
             self.numberOfWhite -= 1
         else:
@@ -361,12 +438,12 @@ class HahkiAPI:
         end_game = False
         if self.numberOfBlack == 0 or self.numberOfWhite == 0:
             if self.numberOfWhite == 0:
-                if self.playerDraught == "w":
+                if self.playerDraughts == "w":
                     game_result = "lose"
                 else:
                     game_result = "win"
             elif self.numberOfBlack == 0:
-                if self.playerDraught == "w":
+                if self.playerDraughts == "w":
                     game_result = "win"
                 else:
                     game_result = "lose"
@@ -377,9 +454,9 @@ class HahkiAPI:
         функция для распознования цвета последней сбитой шашки
         :return: цвет сбитой шишки "black" or "white"
         """
-        if self.playDraught == "b":
+        if self.playDraughts == "b":
             return "w"
-        elif self.playDraught == "w":
+        elif self.playDraughts == "w":
             return "b"
 
     def simple_step(self, i_first_position, j_first_position, i, j):
@@ -397,8 +474,6 @@ class HahkiAPI:
         """
         производит проверку на принадлежность указателя мыши клетке на доске
         :param mp: данные о указатели мыши
-        :param i: 1 индекс в массиве
-        :param j: 2 индекс в массиве
         :return: True если мышь находится на i и j  позиции или False в противном
         """
         for i in range(10):
@@ -444,7 +519,10 @@ class HahkiAPI:
             ]
 
     def change_godraught(self):
-        if self.playDraught == 'w':
-            self.playDraught = 'b'
+        """
+        изменяет цвет шашек которыми нужно ходить
+        """
+        if self.playDraughts == 'w':
+            self.playDraughts = 'b'
         else:
-            self.playDraught = 'w'
+            self.playDraughts = 'w'

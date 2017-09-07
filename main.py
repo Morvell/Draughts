@@ -16,7 +16,7 @@ game_type, selectchess = mainMenu.run()
 if game_type == "AI":
     game.AI = True
 
-game.playerDraught = selectchess
+game.playerDraughts = selectchess
 
 gameGUI.set_start_position()
 
