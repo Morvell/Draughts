@@ -13,8 +13,8 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_hodWithEnemyForDamka(self):
-        self.game.iFirstActivePosition=0
-        self.game.jFirstActivePosition=9
+        self.game.iFirstActivePosition = 0
+        self.game.jFirstActivePosition = 9
         self.game.gameField = [
             list(' . . . . q'),
             list('. . . b . '),
@@ -27,7 +27,6 @@ class TestHahkiAPI(TestCase):
             list(' w w w w w'),
             list('w w w w w '),
         ]
-
 
         accesmass = [
             list(' . . . . .'),
@@ -43,7 +42,7 @@ class TestHahkiAPI(TestCase):
         ]
         self.game.hod_with_enemy_for_king(2, 5)
         self.assertEqual(self.game.gameField, accesmass)
-        #For black damka
+        # For black damka
         self.game.iFirstActivePosition = 2
         self.game.jFirstActivePosition = 5
 
@@ -81,7 +80,6 @@ class TestHahkiAPI(TestCase):
 
         self.game.playDraughts = 'b'
         self.game.playerDraughts = 'w'
-
 
         self.game.gameField = [
             list(' . . . . .'),
@@ -173,7 +171,6 @@ class TestHahkiAPI(TestCase):
 
         self.assertTrue(self.game.enemy_or_not(1, 0))
         self.assertTrue(self.game.enemy_or_not(1, 2))
-
 
     def test_ruleTwo(self):
         self.game.playDraughts = "b"
@@ -293,11 +290,11 @@ class TestHahkiAPI(TestCase):
             list('b . . . . '),
         ]
 
-        self.assertTrue(self.game.king_check_without_enemy(0, 1))
-        self.assertFalse(self.game.king_check_without_enemy(9, 0))
+        self.assertTrue(self.game.king_check_without_enemy(0))
+        self.assertFalse(self.game.king_check_without_enemy(9))
 
-        self.game.playerDraughts= 'w'
-        self.assertTrue(self.game.king_check_without_enemy(9, 0))
+        self.game.playerDraughts = 'w'
+        self.assertTrue(self.game.king_check_without_enemy(9))
 
     def test_hodWithEnemy(self):
         self.game.playDraughts = "b"
@@ -324,8 +321,8 @@ class TestHahkiAPI(TestCase):
         self.assertTrue(self.game.gameField[1][6] == '.')
         self.assertTrue(self.game.gameField[0][7] == '.')
 
-        self.game.iFirstActivePosition=8
-        self.game.jFirstActivePosition=1
+        self.game.iFirstActivePosition = 8
+        self.game.jFirstActivePosition = 1
 
         self.game.step_with_enemy(6, 3)
         self.assertTrue(self.game.gameField[6][3] == 'w')
@@ -392,9 +389,9 @@ class TestHahkiAPI(TestCase):
         self.assertFalse(self.game.normal_step_rule(2, 5, 4, 3))
 
     def test_changeNumber(self):
-        self.game.playDraughts= 'w'
+        self.game.playDraughts = 'w'
         self.game.change_number_of_live_draughts()
-        self.assertEqual(self.game.numberOfBlack,19)
+        self.assertEqual(self.game.numberOfBlack, 19)
         self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfBlack, 18)
         self.game.playDraughts = 'b'
@@ -434,7 +431,7 @@ class TestHahkiAPI(TestCase):
         None
 
     def test_changeGoChess(self):
-        self.game.playDraughts= 'w'
+        self.game.playDraughts = 'w'
         self.game.change_godraught()
         self.assertEqual(self.game.playDraughts, 'b')
 
