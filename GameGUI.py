@@ -60,7 +60,7 @@ class GameGUI:
         """
         устонавливет сартовую позицию
         """
-        if self.logic.playerchess == "b":
+        if self.logic.playerDraughts == "b":
             self.logic.set_start_playing_field("up")
         else:
             self.logic.set_start_playing_field("down")
@@ -78,7 +78,7 @@ class GameGUI:
         """
         Отображает кто должен ходить 
         """
-        if self.logic.gochess == "w":
+        if self.logic.playDraughts == "w":
             self.rightscreen.blit(self.labelWhiteChess, (25, 300))
         else:
             self.rightscreen.blit(self.labelBlackChess, (15, 300))
@@ -90,17 +90,17 @@ class GameGUI:
         for i in range(10):
             for j in range(10):
                 try:
-                    if self.logic.polemass[i][j] == 'b':
+                    if self.logic.gameField[i][j] == 'b':
                         self.mainscreen.blit(self.i_hb, (j*self.lengthOrWidth, i * self.lengthOrWidth))
-                    elif self.logic.polemass[i][j] == 'w':
+                    elif self.logic.gameField[i][j] == 'w':
                         self.mainscreen.blit(self.i_hw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
 
-                    elif self.logic.polemass[i][j] == 'q':
+                    elif self.logic.gameField[i][j] == 'q':
                         self.mainscreen.blit(self.i_dw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
-                    elif self.logic.polemass[i][j] == 'v':
+                    elif self.logic.gameField[i][j] == 'v':
                         self.mainscreen.blit(self.i_db, (j*self.lengthOrWidth, i * self.lengthOrWidth))
 
-                    self.logic.polemass[i][j].render(self.mainscreen)
+                    self.logic.gameField[i][j].render(self.mainscreen)
                 except AttributeError:
                     None
                 except Exception as e:
