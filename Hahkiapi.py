@@ -52,7 +52,7 @@ class HahkiAPI:
         :param j: второй индекс массива
         """
         # проверка что бы не ходил на пустую клетку
-        if self.gameField[i][j] == self.GAME_PIECE:
+        if self.gameField[i][j] == self.GAME_PIECE and self.continueStep==False:
             return
 
         draughts_with_enemy = self.check_chess_with_enemy()
@@ -321,7 +321,9 @@ class HahkiAPI:
             else:
                 self.j_enemy_position = j + 1
 
-        if self.gameField[self.i_enemy_position][self.j_enemy_position] == ".":
+
+
+        if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and self.gameField[self.i_enemy_position][self.j_enemy_position] == ".":
             return []
         for a in (2, -2):
             for b in (2, -2):
@@ -332,6 +334,17 @@ class HahkiAPI:
                     continue
 
         return enemy_array
+
+    def out_of_range(self,i,j):
+        """
+        проверка на out of range
+        :param i:
+        :param j:
+        :return: True or False
+        """
+        if i<0 or i>9 or j<0 or j>9:
+            return False
+        return True
 
     def check_enemy(self, i, j):
         """
@@ -478,11 +491,11 @@ class HahkiAPI:
         """
         for i in range(10):
             for j in range(10):
-                if (j * self.LENGTH_OR_WIDTH < mp[0] < (
-                                j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and i * self.LENGTH_OR_WIDTH < mp[1] <
+                if (j * self.LENGTH_OR_WIDTH < mp[0] and mp[0] < (
+                                j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and i * self.LENGTH_OR_WIDTH < mp[1] and mp[1]<
                     (i * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH)):
                     return i, j
-
+        return 0, 0
     def set_start_playing_field(self, side='down'):
         """
         Задает массив доски с шашками
