@@ -40,7 +40,7 @@ class TestHahkiAPI(TestCase):
             list(' w w w w w'),
             list('w w w w w '),
         ]
-        self.game.hod_with_enemy_for_king(2, 5)
+        self.game.step_with_enemy_for_king(2, 5)
         self.assertEqual(self.game.gameField, accesmass)
         # For black damka
         self.game.iFirstActivePosition = 2
@@ -71,7 +71,7 @@ class TestHahkiAPI(TestCase):
             list(' w w w w w'),
             list('w w w w w '),
         ]
-        self.game.hod_with_enemy_for_king(0, 7)
+        self.game.step_with_enemy_for_king(0, 7)
         self.assertEqual(self.game.gameField, accesmassForBlack)
 
     def test_accesHodForDamka(self):
@@ -438,3 +438,23 @@ class TestHahkiAPI(TestCase):
         self.game.playDraughts = 'b'
         self.game.change_godraught()
         self.assertEqual(self.game.playDraughts, 'w')
+
+    def test_correct_step_with_enemy(self):
+        self.game.playDraughts = 'w'
+        self.game.gameField = [
+            list(' w w w w w'),
+            list('w w w w w '),
+            list(' w w w w w'),
+            list('w w w w w '),
+            list(' . . . . .'),
+            list('. . b b . '),
+            list(' . w . b b'),
+            list('. . b b b '),
+            list(' b . b b b'),
+            list('b b b b b '),
+        ]
+        self.game.iFirstActivePosition=6
+        self.game.jFirstActivePosition=3
+        self.assertEqual(self.game.correct_step_with_enemy(6,3),[])
+        self.assertEqual(self.game.correct_step_with_enemy(4,5),[(4, 1), (4, 5), (8, 1), (8, 5)])
+
