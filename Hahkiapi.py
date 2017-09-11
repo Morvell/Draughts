@@ -52,7 +52,7 @@ class HahkiAPI:
         :param j: второй индекс массива
         """
         # проверка что бы не ходил на пустую клетку
-        if self.gameField[i][j] == self.GAME_PIECE and self.continueStep==False:
+        if self.gameField[i][j] == self.GAME_PIECE and self.continueStep == False:
             return
 
         draughts_with_enemy = self.check_chess_with_enemy()
@@ -64,7 +64,7 @@ class HahkiAPI:
                 return
 
             if self.continueStep and self.king_or_not_king() and self.correct_hod_for_king(i, j):
-                self.hod_with_enemy_for_king(i, j)
+                self.step_with_enemy_for_king(i, j)
                 if len(self.check_chess_with_enemy()) == 0:
                     self.change_godraught()
                     self.continueStep = False
@@ -103,7 +103,7 @@ class HahkiAPI:
             self.continueStep = False
             self.change_godraught()
 
-    def hod_with_enemy_for_king(self, i, j):
+    def step_with_enemy_for_king(self, i, j):
         """
         реализация хода для короля
         :param i: первая позиция для хода
@@ -185,7 +185,8 @@ class HahkiAPI:
                     # print('[' + str(iFirstActivePosition - a * k) + "][" + str(jFirstActivePosition - b * k) + "]")
                     if i_first_position - a * k > 0 and j_first_position - b * k > 0 and i_first_position - a * k < 9 and j_first_position - b * k < 9:
 
-                        if self.gameField[i_first_position - a * k][j_first_position - b * k] != "." and self.enemy_or_not(
+                        if self.gameField[i_first_position - a * k][
+                                    j_first_position - b * k] != "." and self.enemy_or_not(
                                         i_first_position - a * k,
                                         j_first_position - b * k) and \
                                         self.gameField[i_first_position - a * (k + 1)][
@@ -322,29 +323,30 @@ class HahkiAPI:
                 self.j_enemy_position = j - 1
             else:
                 self.j_enemy_position = j + 1
-
-
-
-        if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and self.gameField[self.i_enemy_position][self.j_enemy_position] == ".":
+        if self.gameField[self.i_enemy_position][self.j_enemy_position] == self.playDraughts:
+            return []
+        if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and self.gameField[self.i_enemy_position][
+            self.j_enemy_position] == ".":
             return []
         for a in (2, -2):
             for b in (2, -2):
                 try:
-                    if self.gameField[self.iFirstActivePosition - a][self.jFirstActivePosition - b] != self.playDraughts:
+                    if self.gameField[self.iFirstActivePosition - a][
+                                self.jFirstActivePosition - b] != self.playDraughts:
                         enemy_array.append((self.iFirstActivePosition - a, self.jFirstActivePosition - b))
                 except Exception:
                     continue
 
         return enemy_array
 
-    def out_of_range(self,i,j):
+    def out_of_range(self, i, j):
         """
         проверка на out of range
         :param i:
         :param j:
         :return: True or False
         """
-        if i<0 or i>9 or j<0 or j>9:
+        if i < 0 or i > 9 or j < 0 or j > 9:
             return False
         return True
 
@@ -494,10 +496,12 @@ class HahkiAPI:
         for i in range(10):
             for j in range(10):
                 if (j * self.LENGTH_OR_WIDTH < mp[0] and mp[0] < (
-                                j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and i * self.LENGTH_OR_WIDTH < mp[1] and mp[1]<
+                                j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and i * self.LENGTH_OR_WIDTH < mp[
+                    1] and mp[1] <
                     (i * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH)):
                     return i, j
         return 0, 0
+
     def set_start_playing_field(self, side='down'):
         """
         Задает массив доски с шашками
@@ -523,13 +527,13 @@ class HahkiAPI:
             self.gameField = [
                 list(' w w w w w'),
                 list('w w w w w '),
-                list(' w w w w w'),
-                list('w w w w w '),
-                list(' . . . . .'),
-                list('. . b b . '),
-                list(' . w . b b'),
-                list('. . b b b '),
-                list(' b . b b b'),
+                list(' w w w w .'),
+                list('. . . . w '),
+                list(' w . b . .'),
+                list('. . . b . '),
+                list(' . . . . b'),
+                list('b b b b b '),
+                list(' b b b b b'),
                 list('b b b b b '),
             ]
 
