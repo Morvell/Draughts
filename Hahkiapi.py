@@ -305,6 +305,8 @@ class HahkiAPI:
         """
         выдает массив с нужными врагами
         """
+        if self.gameField[i][j] != self.GAME_PIECE:
+            return []
         enemy_array = []
         self.i_enemy_position = 0
         self.j_enemy_position = 0
@@ -524,10 +526,10 @@ class HahkiAPI:
                 list(' w w w w w'),
                 list('w w w w w '),
                 list(' . . . . .'),
-                list('. . . . . '),
-                list(' b b b b b'),
-                list('b b b b b '),
-                list(' b b b b b'),
+                list('. . b b . '),
+                list(' . w . b b'),
+                list('. . b b b '),
+                list(' b . b b b'),
                 list('b b b b b '),
             ]
 
