@@ -323,7 +323,8 @@ class HahkiAPI:
                 self.j_enemy_position = j - 1
             else:
                 self.j_enemy_position = j + 1
-        if self.gameField[self.i_enemy_position][self.j_enemy_position] == self.playDraughts:
+
+        if not self.out_of_range(self.i_enemy_position, self.j_enemy_position) or self.gameField[self.i_enemy_position][self.j_enemy_position] == self.playDraughts:
             return []
         if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and self.gameField[self.i_enemy_position][
             self.j_enemy_position] == ".":
@@ -527,13 +528,13 @@ class HahkiAPI:
             self.gameField = [
                 list(' w w w w w'),
                 list('w w w w w '),
-                list(' w w w w .'),
-                list('. . . . w '),
-                list(' w . b . .'),
-                list('. . . b . '),
-                list(' . . . . b'),
+                list(' w w w w w'),
+                list('w w w w w '),
+                list(' . . . . .'),
+                list('. . . . . '),
+                list(' . . . . w'),
                 list('b b b b b '),
-                list(' b b b b b'),
+                list(' b b b . b'),
                 list('b b b b b '),
             ]
 
