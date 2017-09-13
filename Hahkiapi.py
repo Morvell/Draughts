@@ -39,8 +39,9 @@ class HahkiAPI:
 
         if self.AI and self.playDraughts != self.playerDraughts:
             for i in range(10):
-                for j in range(10):
-                    self.game_logic(i, j)
+                if self.playDraughts != self.playerDraughts:
+                    for j in range(10):
+                        self.game_logic(i, j)
         else:
             i, j = self.check_draughts(mp)
             self.game_logic(i, j)
@@ -128,6 +129,7 @@ class HahkiAPI:
         self.gameField[i][j] = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
         self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] = self.GAME_PIECE
         self.gameField[self.i_enemy_position][self.j_enemy_position] = self.GAME_PIECE
+        self.change_number_of_live_draughts()
 
     def correct_hod_for_king(self, i, j):
         """
@@ -512,15 +514,15 @@ class HahkiAPI:
 
         if side == 'down':
             self.gameField = [
-                list(' . . . b .'),
-                list('. . . w . '),
-                list(' . . . . .'),
+                list(' . . . v .'),
                 list('. . . . . '),
                 list(' . . . . .'),
                 list('. . . . . '),
+                list(' . . b . .'),
+                list('. . . . . '),
                 list(' . . . . .'),
-                list('. b . . . '),
-                list(' w . . . .'),
+                list('. w . . . '),
+                list(' b . . . .'),
                 list('. . . . . '),
             ]
 
@@ -532,9 +534,9 @@ class HahkiAPI:
                 list('w w w w w '),
                 list(' . . . . .'),
                 list('. . . . . '),
-                list(' . . . . w'),
+                list(' b b b b b'),
                 list('b b b b b '),
-                list(' b b b . b'),
+                list(' b b b b b'),
                 list('b b b b b '),
             ]
 
