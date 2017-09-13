@@ -25,11 +25,14 @@ done = True
 while done:
 
     endgame, gameresult = game.check_end_game()
+    print(str(endgame) + " " + str(gameresult))
     if endgame:
         endMenu = endMenu.EndMenu()
         endMenu.run(gameresult)
+    else:
+        gameGUI.render()
 
     done = gameGUI.mouseEventCheck()
 
-    gameGUI.render()
+
 

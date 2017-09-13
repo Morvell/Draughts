@@ -457,6 +457,7 @@ class HahkiAPI:
         game_result = False
         end_game = False
         if self.numberOfBlack == 0 or self.numberOfWhite == 0:
+            end_game = True
             if self.numberOfWhite == 0:
                 if self.playerDraughts == "w":
                     game_result = "lose"
@@ -514,17 +515,19 @@ class HahkiAPI:
 
         if side == 'down':
             self.gameField = [
-                list(' . . . v .'),
+                list(' . . . . .'),
                 list('. . . . . '),
                 list(' . . . . .'),
                 list('. . . . . '),
-                list(' . . b . .'),
+                list(' . . . . .'),
                 list('. . . . . '),
                 list(' . . . . .'),
                 list('. w . . . '),
                 list(' b . . . .'),
                 list('. . . . . '),
             ]
+            self.numberOfWhite =1
+            self.numberOfBlack =1
 
         elif side == 'up':
             self.gameField = [
