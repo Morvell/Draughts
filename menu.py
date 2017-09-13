@@ -60,7 +60,7 @@ class Menu:
                     if e.key == pygame.K_DOWN:
                         if self.punkt < (len(self.punkts) - 1):
                             self.punkt += 1
-                if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                if (e.type == pygame.MOUSEBUTTONDOWN and e.button == 1) or (e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
                     return self.doneWithPunkt()
 
             self.window.blit(self.mainscreen, (0, 0))
