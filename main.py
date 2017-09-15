@@ -36,7 +36,6 @@ while done:
         newGame = False
 
     endgame, gameresult = game.check_end_game()
-    print(str(endgame) + " " + str(gameresult))
     if endgame:
         EndMenu = endMenu.EndMenu()
         newGame = EndMenu.run(gameresult)
