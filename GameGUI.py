@@ -75,17 +75,15 @@ class GameGUI:
     def step_history(self):
         n = len(self.logic.stepArray)
         for i in range(n):
-            print(i)
             if self.logic.stepArray.get_color(i) == 'b':
                 labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (0, 0, 0))
                 labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (0, 0, 0))
             else:
-                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (255, 255, 255))
-                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (255, 255, 255))
+                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
+                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
 
             self.rightscreen.blit(labelOne, (5, 370 + (n-i) * 35))
             self.rightscreen.blit(labelTwo, (100, 370 + (n-i) * 35))
-        print("________________")
 
     def whoGoRender(self):
         """
