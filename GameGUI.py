@@ -9,8 +9,6 @@ class GameGUI:
 
         self.logic = gameLogic
 
-
-
         self.board = pygame.image.load('pic/Board.gif')
         self.i_hb = pygame.image.load('pic/HBlack.gif')
         self.i_hw = pygame.image.load('pic/HWhite.gif')
@@ -74,6 +72,19 @@ class GameGUI:
         self.rightscreen.blit(labelWhite, (70, 20))
         self.rightscreen.blit(labelBlack, (70, 120))
 
+    def step_history(self):
+        n = len(self.logic.stepArray)
+        for i in range(n):
+            if self.logic.stepArray.get_color(i) == 'b':
+                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (0, 0, 0))
+                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (0, 0, 0))
+            else:
+                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
+                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
+
+            self.rightscreen.blit(labelOne, (5, 370 + (n-i) * 35))
+            self.rightscreen.blit(labelTwo, (100, 370 + (n-i) * 35))
+
     def whoGoRender(self):
         """
         Отображает кто должен ходить 
@@ -91,14 +102,14 @@ class GameGUI:
             for j in range(10):
                 try:
                     if self.logic.gameField[i][j] == 'b':
-                        self.mainscreen.blit(self.i_hb, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_hb, (j * self.lengthOrWidth, i * self.lengthOrWidth))
                     elif self.logic.gameField[i][j] == 'w':
-                        self.mainscreen.blit(self.i_hw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_hw, (j * self.lengthOrWidth, i * self.lengthOrWidth))
 
                     elif self.logic.gameField[i][j] == 'q':
-                        self.mainscreen.blit(self.i_dw, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_dw, (j * self.lengthOrWidth, i * self.lengthOrWidth))
                     elif self.logic.gameField[i][j] == 'v':
-                        self.mainscreen.blit(self.i_db, (j*self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_db, (j * self.lengthOrWidth, i * self.lengthOrWidth))
 
                     self.logic.gameField[i][j].render(self.mainscreen)
                 except AttributeError:
@@ -118,6 +129,7 @@ class GameGUI:
         self.rightscreen.blit(self.labalGoChess, (25, 220))
         self.changeNumberRender()
         self.whoGoRender()
+        self.step_history()
         self.renderGameField()
 
         pygame.display.flip()
