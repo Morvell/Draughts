@@ -1,4 +1,5 @@
 import pygame
+from PauseMenu import PauseMenu
 
 
 class GameGUI:
@@ -45,6 +46,15 @@ class GameGUI:
         done = True
 
         for e in pygame.event.get():
+
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    punkts = [(365, 200, u'Continue', (123, 15, 34), (235, 75, 156), 0),
+                              (400, 300, u'Save', (123, 15, 34), (235, 75, 156), 1),
+                              (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
+                    pause = PauseMenu(punkts)
+                    pause.run()
+
 
             if e.type == pygame.QUIT:
                 done = False
