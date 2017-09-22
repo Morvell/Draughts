@@ -11,7 +11,8 @@ class MainMenu(Menu):
 
         easy_game = 0
         AI_game = 1
-        exit = 2
+        save = 2
+        exit = 3
 
         if self.punkt == easy_game:
             self.done = False
@@ -27,6 +28,7 @@ class MainMenu(Menu):
             self.game_type = "AI"
             self.game_side = select
             return self.game_type, self.game_side
+        elif 
 
         elif self.punkt == exit:
             sys.exit()

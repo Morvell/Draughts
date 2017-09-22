@@ -55,7 +55,6 @@ class GameGUI:
                     pause = PauseMenu(punkts)
                     pause.run()
 
-
             if e.type == pygame.QUIT:
                 done = False
 
@@ -92,8 +91,8 @@ class GameGUI:
                 labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
                 labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
 
-            self.rightscreen.blit(labelOne, (5, 370 + (n-i) * 35))
-            self.rightscreen.blit(labelTwo, (100, 370 + (n-i) * 35))
+            self.rightscreen.blit(labelOne, (5, 370 + (n - i) * 35))
+            self.rightscreen.blit(labelTwo, (100, 370 + (n - i) * 35))
 
     def whoGoRender(self):
         """
