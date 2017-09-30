@@ -1,10 +1,10 @@
 from unittest import TestCase
 
-from Hahkiapi import HahkiAPI
+from Hahkiapi import DraughtsAPI
 
 
 class TestHahkiAPI(TestCase):
-    game = HahkiAPI()
+    game = DraughtsAPI()
 
     def test_without_net(self):
         None

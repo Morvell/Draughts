@@ -3,7 +3,6 @@ import sys
 
 
 class Menu:
-
     game_type = "easy"
     game_side = "white"
     game_AI = 0
@@ -31,21 +30,20 @@ class Menu:
             else:
                 poverhnost.blit(font.render(e[2], 1, e[3]), (e[0], e[1]))
 
-    def collaidePunkt(self, mp):
+    def collaide_punkt(self, mp):
         for i in self.punkts:
             if mp[0] > i[0] and mp[0] < (i[0] + 155) and mp[1] > i[1] and mp[1] < (i[1] + 50):
                 self.punkt = i[5]
 
-    def doneWithPunkt(self):
+    def done_with_punkt(self):
         pass
-
 
     def run(self):
 
         while self.done:
 
             mp = pygame.mouse.get_pos()
-            self.collaidePunkt(mp)
+            self.collaide_punkt(mp)
             self.render(self.mainscreen, self.font_menu, self.punkt)
 
             for e in pygame.event.get():
@@ -60,8 +58,9 @@ class Menu:
                     if e.key == pygame.K_DOWN:
                         if self.punkt < (len(self.punkts) - 1):
                             self.punkt += 1
-                if (e.type == pygame.MOUSEBUTTONDOWN and e.button == 1) or (e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
-                    return self.doneWithPunkt()
+                if (e.type == pygame.MOUSEBUTTONDOWN and e.button == 1) or \
+                        (e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
+                    return self.done_with_punkt()
 
             self.window.blit(self.mainscreen, (0, 0))
             self.window.blit(self.rightscreen, (720, 0))

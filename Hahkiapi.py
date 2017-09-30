@@ -1,9 +1,8 @@
 from HistoryArray import HistoryArray
 import json
-import parser
 
 
-class HahkiAPI:
+class DraughtsAPI:
     def __init__(self):
         self.numberOfWhite = 20
         self.numberOfBlack = 20
@@ -39,43 +38,58 @@ class HahkiAPI:
         self.LENGTH_OR_WIDTH = 72
 
     def save_game(self):
-        #0
-        parse_game = str(self.numberOfWhite)+'|'
-        #1
-        parse_game += str(self.numberOfBlack)+'|'
-        #2
-        parse_game += str(self.lastKill)+'|'
-        #3
-        parse_game += str(self.gameSide)+'|'
-        #4
-        parse_game += str(self.playerDraughts)+'|'
-        #5
-        parse_game += str(self.playDraughts)+'|'
-        #6
-        parse_game += str(self.AI)+'|'
-        #7
-        parse_game += str(self.mouseButtonDownFlag)+'|'
-        #8
-        parse_game += str(self.continueStep)+'|'
-        #9
-        parse_game += str(self.continueDraught)+'|'
-        #10
-        parse_game += str(self.iFirstActivePosition)+'|'
-        #11
-        parse_game += str(self.jFirstActivePosition)+'|'
-        #12
-        parse_game += json.dumps(self.gameField)+'|'
-        #13
+
+        """
+        делает строку со всеми состояниями поля
+        :return: string
+        """
+        # 0
+        parse_game = str(self.numberOfWhite) + '|'
+        # 1
+        parse_game += str(self.numberOfBlack) + '|'
+        # 2
+        parse_game += str(self.lastKill) + '|'
+        # 3
+        parse_game += str(self.gameSide) + '|'
+        # 4
+        parse_game += str(self.playerDraughts) + '|'
+        # 5
+        parse_game += str(self.playDraughts) + '|'
+        # 6
+        parse_game += str(self.AI) + '|'
+        # 7
+        parse_game += str(self.mouseButtonDownFlag) + '|'
+        # 8
+        parse_game += str(self.continueStep) + '|'
+        # 9
+        parse_game += str(self.continueDraught) + '|'
+        # 10
+        parse_game += str(self.iFirstActivePosition) + '|'
+        # 11
+        parse_game += str(self.jFirstActivePosition) + '|'
+        # 12
+        parse_game += json.dumps(self.gameField) + '|'
+        # 13
         parse_game += str(self.stepArray)
         return parse_game
 
     def to_bool(self, var):
+        """
+        Преобразование "False"/"True" в булевый вариант
+        :param var: строка полученная функцией save_game
+        :return: False or True
+        """
         if var == "True":
             return True
         else:
             return False
 
     def load_game(self, parse_game):
+        """
+        воссоздает состояние игры после загрузки
+
+        :param parse_game:
+        """
         reparse_game = parse_game.split("|")
         self.numberOfWhite = int(reparse_game[0])
         self.numberOfBlack = int(reparse_game[1])
@@ -91,7 +105,6 @@ class HahkiAPI:
         self.jFirstActivePosition = int(reparse_game[11])
         self.gameField = json.loads(reparse_game[12])
         self.stepArray.set_array(reparse_game[13])
-
 
     def without_net(self, mp):
         """
@@ -115,7 +128,7 @@ class HahkiAPI:
         :param j: второй индекс массива
         """
         # проверка что бы не ходил на пустую клетку
-        if self.gameField[i][j] == self.GAME_PIECE and self.continueStep == False:
+        if self.gameField[i][j] == self.GAME_PIECE and not self.continueStep:
             return
 
         draughts_with_enemy = self.check_chess_with_enemy()
@@ -191,7 +204,8 @@ class HahkiAPI:
         self.gameField[i][j] = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
         self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] = self.GAME_PIECE
         self.gameField[self.i_enemy_position][self.j_enemy_position] = self.GAME_PIECE
-        self.stepArray.put(((self.iFirstActivePosition+1, self.jFirstActivePosition+1), (i+1, j+1), self.playDraughts))
+        self.stepArray.put(
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
 
     def correct_hod_for_king(self, i, j):
@@ -228,11 +242,8 @@ class HahkiAPI:
         Проверка на короля
         :return: True or False
         """
-        if self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] == self.WHITE_KING or \
-                        self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] == self.BLACK_KING:
-            return True
-        else:
-            return False
+        cur = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
+        return cur == self.WHITE_KING or cur == self.BLACK_KING
 
     def check_enemy_for_king(self, i, j):
         """
@@ -248,12 +259,12 @@ class HahkiAPI:
             for a in (1, -1):
                 for b in (1, -1):
                     # print('[' + str(iFirstActivePosition - a * k) + "][" + str(jFirstActivePosition - b * k) + "]")
-                    if i_first_position - a * k > 0 and j_first_position - b * k > 0 and i_first_position - a * k < 9 and j_first_position - b * k < 9:
+                    if i_first_position - a * k > 0 and j_first_position - b * k > 0 and i_first_position - a * k < 9 \
+                            and j_first_position - b * k < 9:
 
                         if self.gameField[i_first_position - a * k][
-                                    j_first_position - b * k] != "." and self.enemy_or_not(
-                                    i_first_position - a * k,
-                                    j_first_position - b * k) and \
+                                    j_first_position - b * k] != "." and \
+                                    self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
                                         self.gameField[i_first_position - a * (k + 1)][
                                                     j_first_position - b * (k + 1)] == ".":
                             enemy_array.append((i_first_position - a * k, j_first_position - b * k))
@@ -268,15 +279,8 @@ class HahkiAPI:
         :return: True or False
         """
         if self.playDraughts == 'w':
-            if self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v':
-                return True
-            else:
-                return False
-        else:
-            if self.gameField[i][j] == 'w' or self.gameField[i][j] == 'q':
-                return True
-            else:
-                return False
+            return self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v'
+        return self.gameField[i][j] == 'w' or self.gameField[i][j] == 'q'
 
     def friend_or_not(self, i, j):
         """
@@ -286,15 +290,8 @@ class HahkiAPI:
         :return: True or False
         """
         if self.playDraughts == 'b':
-            if self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v':
-                return True
-            else:
-                return False
-        else:
-            if self.gameField[i][j] == 'w' or self.gameField[i][j] == 'q':
-                return True
-            else:
-                return False
+            return self.gameField[i][j] == 'b' or self.gameField[i][j] == 'v'
+        return self.gameField[i][j] == 'w' or self.gameField[i][j] == 'q'
 
     def set_king(self, i, j):
         """
@@ -364,7 +361,8 @@ class HahkiAPI:
         self.gameField[i][j] = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
         self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] = '.'
         self.gameField[self.i_enemy_position][self.j_enemy_position] = '.'
-        self.stepArray.put(((self.iFirstActivePosition+1, self.jFirstActivePosition+1), (i+1, j+1), self.playDraughts))
+        self.stepArray.put(
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
 
     def correct_step_with_enemy(self, i, j):
@@ -389,11 +387,11 @@ class HahkiAPI:
             else:
                 self.j_enemy_position = j + 1
 
-        if not self.out_of_range(self.i_enemy_position, self.j_enemy_position) or self.gameField[self.i_enemy_position][
-            self.j_enemy_position] == self.playDraughts:
+        if not self.out_of_range(self.i_enemy_position, self.j_enemy_position) or \
+                        self.gameField[self.i_enemy_position][self.j_enemy_position] == self.playDraughts:
             return []
-        if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and self.gameField[self.i_enemy_position][
-            self.j_enemy_position] == ".":
+        if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and \
+                        self.gameField[self.i_enemy_position][self.j_enemy_position] == ".":
             return []
         for a in (2, -2):
             for b in (2, -2):
@@ -429,9 +427,11 @@ class HahkiAPI:
         for a in (1, -1):
             for b in (1, -1):
                 try:
-                    if i - a < 0 or i - a > 9 or j - b < 0 or j - b > 9 or i - a * 2 < 0 or i - a * 2 > 9 or j - b * 2 < 0 or j - b * 2 > 9:
+                    if i - a < 0 or i - a > 9 or j - b < 0 or j - b > 9 or i - a * 2 < 0 or i - a * 2 > 9 or \
+                                            j - b * 2 < 0 or j - b * 2 > 9:
                         continue
-                    if self.gameField[i - a][j - b] != '.' and self.gameField[i - a][j - b] != self.gameField[i][j] and \
+                    if self.gameField[i - a][j - b] != '.' and \
+                                    self.gameField[i - a][j - b] != self.gameField[i][j] and \
                                     self.gameField[i - a * 2][j - b * 2] == '.':
                         enemy_array.append((i - a, j - b))
                 except Exception:
@@ -551,7 +551,8 @@ class HahkiAPI:
         """
         self.gameField[i][j] = self.gameField[i_first_position][j_first_position]
         self.gameField[i_first_position][j_first_position] = '.'
-        self.stepArray.put(((self.iFirstActivePosition+1, self.jFirstActivePosition+1), (i+1, j+1), self.playDraughts))
+        self.stepArray.put(
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
 
     def check_draughts(self, mp):
         """
@@ -561,9 +562,9 @@ class HahkiAPI:
         """
         for i in range(10):
             for j in range(10):
-                if (j * self.LENGTH_OR_WIDTH < mp[0] and mp[0] < (
-                                j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and i * self.LENGTH_OR_WIDTH < mp[
-                    1] and mp[1] <
+                if (j * self.LENGTH_OR_WIDTH < mp[0] and mp[0] <
+                    (j * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH) and
+                                i * self.LENGTH_OR_WIDTH < mp[1] and mp[1] <
                     (i * self.LENGTH_OR_WIDTH + self.LENGTH_OR_WIDTH)):
                     return i, j
         return 0, 0

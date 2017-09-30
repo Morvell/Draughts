@@ -9,10 +9,11 @@ class Kletka:
         self.y = pos[1]
 
     def getpos(self):
-        return (self.x, self.y)
+        return self.x, self.y
 
     def render(self, screen):
         pass
+
 
 class Hahka(Kletka):
     def __init__(self, xpos, ypos, vid, bitmap, side):
@@ -23,11 +24,8 @@ class Hahka(Kletka):
         self.damka = False
 
     def render(self, screen):
-
         screen.blit(self.bitmap, (self.x, self.y))
 
     def updatebitmap(self, newbitmap):
         self.bitmap = newbitmap
         self.bitmap.set_colorkey((255, 255, 255))
-
-

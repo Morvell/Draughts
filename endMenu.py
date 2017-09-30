@@ -17,8 +17,8 @@ labelLose = font.render("Проигрышь", 1, (0, 0, 0))
 class EndMenu:
     def __init__(self):
         self.punkts = [
-                  (390, 300, u'Restart', (123, 15, 34), (235, 75, 156), 0),
-                  (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 1)]
+            (390, 300, u'Restart', (123, 15, 34), (235, 75, 156), 0),
+            (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 1)]
         self.i_menu = pygame.image.load('pic/menu.png')
         self.i_rmenu = pygame.image.load('pic/menurightscreen.png')
         self.punkt = 0
@@ -30,12 +30,12 @@ class EndMenu:
             else:
                 poverhnost.blit(font.render(e[2], 1, e[3]), (e[0], e[1]))
 
-    def collaidePunkt(self, mp):
+    def collaide_punkt(self, mp):
         for i in self.punkts:
             if mp[0] > i[0] and mp[0] < (i[0] + 155) and mp[1] > i[1] and mp[1] < (i[1] + 50):
                 self.punkt = i[5]
 
-    def doneWithPunkt(self):
+    def done_with_punkt(self):
         restart = 0
         exit = 1
 
@@ -45,7 +45,6 @@ class EndMenu:
 
         elif self.punkt == exit:
             sys.exit()
-       
 
     def run(self, ishod):
         done = True
@@ -55,11 +54,10 @@ class EndMenu:
             label = labelLose
 
         while done:
-            self.render(mainscreen,font,self.punkt)
-
+            self.render(mainscreen, font, self.punkt)
 
             mp = pygame.mouse.get_pos()
-            self.collaidePunkt(mp)
+            self.collaide_punkt(mp)
 
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
@@ -74,9 +72,8 @@ class EndMenu:
                         if self.punkt < (len(self.punkts) - 1):
                             self.punkt += 1
                 if (e.type == pygame.MOUSEBUTTONDOWN and e.button == 1) or (
-                        e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
-                    return self.doneWithPunkt()
-
+                                e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
+                    return self.done_with_punkt()
 
             window.blit(mainscreen, (0, 0))
             window.blit(rightscreen, (720, 0))
