@@ -3,12 +3,12 @@ from PauseMenu import PauseMenu
 
 
 class GameGUI:
-    def __init__(self, gameLogic):
+    def __init__(self, game_logic):
         pygame.font.init()
 
         self.lengthOrWidth = 72
 
-        self.logic = gameLogic
+        self.logic = game_logic
 
         self.board = pygame.image.load('pic/Board.gif')
         self.i_hb = pygame.image.load('pic/HBlack.gif')
@@ -27,7 +27,7 @@ class GameGUI:
 
         self.labelWhiteChess = self.font.render("Белые", 1, (255, 255, 255))
         self.labelBlackChess = self.font.render("Черные", 1, (0, 0, 0))
-        self.labalGoChess = self.font.render("Ходят", 1, (78, 226, 14))
+        self.labelGoChess = self.font.render("Ходят", 1, (78, 226, 14))
 
         self.i_rightscreen = pygame.image.load('pic/rightscreen.png')
 
@@ -37,7 +37,7 @@ class GameGUI:
         self.mainscreen = pygame.Surface((720, 720))
         self.rightscreen = pygame.Surface((280, 720))
 
-    def mouseEventCheck(self):
+    def mouse_event_check(self):
         """
         обрабатывает движение мыши
         :return: True или False если пользователь закрыл игру
@@ -72,29 +72,29 @@ class GameGUI:
         else:
             self.logic.set_start_playing_field("down")
 
-    def changeNumberRender(self):
+    def change_number_render(self):
         """
         Отображает количество шашек на поле
         """
-        labelWhite = self.font.render(str(self.logic.numberOfWhite), 1, (255, 255, 255))
-        labelBlack = self.font.render(str(self.logic.numberOfBlack), 1, (0, 0, 0))
-        self.rightscreen.blit(labelWhite, (70, 20))
-        self.rightscreen.blit(labelBlack, (70, 120))
+        label_white = self.font.render(str(self.logic.numberOfWhite), 1, (255, 255, 255))
+        label_black = self.font.render(str(self.logic.numberOfBlack), 1, (0, 0, 0))
+        self.rightscreen.blit(label_white, (70, 20))
+        self.rightscreen.blit(label_black, (70, 120))
 
     def step_history(self):
         n = len(self.logic.stepArray)
         for i in range(n):
             if self.logic.stepArray.get_color(i) == 'b':
-                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (0, 0, 0))
-                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (0, 0, 0))
+                label_one = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (0, 0, 0))
+                label_two = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (0, 0, 0))
             else:
-                labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
-                labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
+                label_one = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
+                label_two = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
 
-            self.rightscreen.blit(labelOne, (5, 370 + (n - i) * 35))
-            self.rightscreen.blit(labelTwo, (100, 370 + (n - i) * 35))
+            self.rightscreen.blit(label_one, (5, 370 + (n - i) * 35))
+            self.rightscreen.blit(label_two, (100, 370 + (n - i) * 35))
 
-    def whoGoRender(self):
+    def who_go_render(self):
         """
         Отображает кто должен ходить 
         """
@@ -103,7 +103,7 @@ class GameGUI:
         else:
             self.rightscreen.blit(self.labelBlackChess, (15, 300))
 
-    def renderGameField(self):
+    def render_game_field(self):
         """
         отрисовывает игровое поле 
         """
@@ -135,10 +135,10 @@ class GameGUI:
         self.window.blit(self.rightscreen, (720, 0))
         self.rightscreen.blit(self.i_rightscreen, (0, 0))
         self.mainscreen.blit(self.board, (0, 0))
-        self.rightscreen.blit(self.labalGoChess, (25, 220))
-        self.changeNumberRender()
-        self.whoGoRender()
+        self.rightscreen.blit(self.labelGoChess, (25, 220))
+        self.change_number_render()
+        self.who_go_render()
         self.step_history()
-        self.renderGameField()
+        self.render_game_field()
 
         pygame.display.flip()

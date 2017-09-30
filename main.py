@@ -1,17 +1,17 @@
 import endMenu
-from Hahkiapi import HahkiAPI
+from Hahkiapi import DraughtsAPI
 from MainMenu import MainMenu
 from GameGUI import GameGUI
 
 
 def new_game(punkts):
-    game = HahkiAPI()
+    game = DraughtsAPI()
     gameGUI = GameGUI(game)
     mainMenu = MainMenu(punkts)
     game_type, selectchess = mainMenu.run()
 
     if game_type == "load":
-        with open("load.txt","r") as f:
+        with open("load.txt", "r") as f:
             string = f.read()
             game.load_game(string)
 
@@ -49,4 +49,4 @@ while done:
     else:
         gameGUI.render()
 
-    done = gameGUI.mouseEventCheck()
+    done = gameGUI.mouse_event_check()

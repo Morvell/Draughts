@@ -13,8 +13,8 @@ class HistoryArray:
             r = i.split("!")
             self.array.append(((int(r[0][1]), int(r[0][4])), (int(r[1][1]), int(r[1][4])), r[2]))
 
-    def put(self, object):
-        self.array.append(object)
+    def put(self, a):
+        self.array.append(a)
         if len(self.array) > self.n:
             self.array.pop(0)
 

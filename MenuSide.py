@@ -9,7 +9,7 @@ class MenuSide(Menu):
                        (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]):
         super().__init__(punkts)
 
-    def doneWithPunkt(self):
+    def done_with_punkt(self):
         white = 0
         black = 1
         exit = 2
