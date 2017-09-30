@@ -52,7 +52,7 @@ class GameGUI:
                     punkts = [(365, 200, u'Continue', (123, 15, 34), (235, 75, 156), 0),
                               (400, 300, u'Save', (123, 15, 34), (235, 75, 156), 1),
                               (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
-                    pause = PauseMenu(punkts)
+                    pause = PauseMenu(punkts, self.logic.save_game)
                     pause.run()
 
             if e.type == pygame.QUIT:

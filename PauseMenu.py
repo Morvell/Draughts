@@ -2,8 +2,9 @@ from menu import *
 
 class PauseMenu(Menu):
 
-    def __init__(self, punkts):
+    def __init__(self, punkts, func=None):
         super().__init__(punkts)
+        self.func = func
 
     def doneWithPunkt(self):
 
@@ -14,6 +15,8 @@ class PauseMenu(Menu):
         if self.punkt == continue_punkt:
             return
         elif self.punkt == save:
-            pass
+            with open("load.txt","w") as f:
+                f.write(self.func())
+
         elif self.punkt == exit:
             sys.exit()
