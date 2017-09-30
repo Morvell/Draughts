@@ -10,18 +10,25 @@ def new_game(punkts):
     mainMenu = MainMenu(punkts)
     game_type, selectchess = mainMenu.run()
 
-    if game_type == "AI":
+    if game_type == "load":
+        with open("load.txt","r") as f:
+            string = f.read()
+            game.load_game(string)
+
+    elif game_type == "AI":
         game.AI = True
-
-    game.playerDraughts = selectchess
-
-    gameGUI.set_start_position()
+        game.playerDraughts = selectchess
+        gameGUI.set_start_position()
+    else:
+        game.playerDraughts = selectchess
+        gameGUI.set_start_position()
     return game, gameGUI
 
 
 punkts = [(300, 200, u'Simple Game', (123, 15, 34), (235, 75, 156), 0),
           (300, 300, u'Game with AI', (123, 15, 34), (235, 75, 156), 1),
-          (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
+          (400, 400, u'Load', (123, 15, 34), (235, 75, 156), 2),
+          (400, 500, u'Exit', (123, 15, 34), (235, 75, 156), 3)]
 
 game, gameGUI = new_game(punkts)
 

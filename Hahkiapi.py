@@ -1,4 +1,6 @@
 from HistoryArray import HistoryArray
+import json
+import parser
 
 
 class HahkiAPI:
@@ -35,6 +37,61 @@ class HahkiAPI:
         self.jFirstActivePosition = 0
 
         self.LENGTH_OR_WIDTH = 72
+
+    def save_game(self):
+        #0
+        parse_game = str(self.numberOfWhite)+'|'
+        #1
+        parse_game += str(self.numberOfBlack)+'|'
+        #2
+        parse_game += str(self.lastKill)+'|'
+        #3
+        parse_game += str(self.gameSide)+'|'
+        #4
+        parse_game += str(self.playerDraughts)+'|'
+        #5
+        parse_game += str(self.playDraughts)+'|'
+        #6
+        parse_game += str(self.AI)+'|'
+        #7
+        parse_game += str(self.mouseButtonDownFlag)+'|'
+        #8
+        parse_game += str(self.continueStep)+'|'
+        #9
+        parse_game += str(self.continueDraught)+'|'
+        #10
+        parse_game += str(self.iFirstActivePosition)+'|'
+        #11
+        parse_game += str(self.jFirstActivePosition)+'|'
+        #12
+        parse_game += json.dumps(self.gameField)+'|'
+        #13
+        parse_game += str(self.stepArray)
+        return parse_game
+
+    def to_bool(self, var):
+        if var == "True":
+            return True
+        else:
+            return False
+
+    def load_game(self, parse_game):
+        reparse_game = parse_game.split("|")
+        self.numberOfWhite = int(reparse_game[0])
+        self.numberOfBlack = int(reparse_game[1])
+        self.lastKill = reparse_game[2]
+        self.gameSide = reparse_game[3]
+        self.playerDraughts = reparse_game[4]
+        self.playDraughts = reparse_game[5]
+        self.AI = self.to_bool(reparse_game[6])
+        self.mouseButtonDownFlag = self.to_bool(reparse_game[7])
+        self.continueStep = self.to_bool(reparse_game[8])
+        self.continueDraught = reparse_game[9]
+        self.iFirstActivePosition = int(reparse_game[10])
+        self.jFirstActivePosition = int(reparse_game[11])
+        self.gameField = json.loads(reparse_game[12])
+        self.stepArray.set_array(reparse_game[13])
+
 
     def without_net(self, mp):
         """

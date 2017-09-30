@@ -1,4 +1,5 @@
 import pygame
+from PauseMenu import PauseMenu
 
 
 class GameGUI:
@@ -46,6 +47,14 @@ class GameGUI:
 
         for e in pygame.event.get():
 
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    punkts = [(365, 200, u'Continue', (123, 15, 34), (235, 75, 156), 0),
+                              (400, 300, u'Save', (123, 15, 34), (235, 75, 156), 1),
+                              (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
+                    pause = PauseMenu(punkts, self.logic.save_game)
+                    pause.run()
+
             if e.type == pygame.QUIT:
                 done = False
 
@@ -82,8 +91,8 @@ class GameGUI:
                 labelOne = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
                 labelTwo = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
 
-            self.rightscreen.blit(labelOne, (5, 370 + (n-i) * 35))
-            self.rightscreen.blit(labelTwo, (100, 370 + (n-i) * 35))
+            self.rightscreen.blit(labelOne, (5, 370 + (n - i) * 35))
+            self.rightscreen.blit(labelTwo, (100, 370 + (n - i) * 35))
 
     def whoGoRender(self):
         """
