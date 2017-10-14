@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from Hahkiapi import DraughtsAPI
+from DraughtsAPI import DraughtsAPI
 
 
 class TestHahkiAPI(TestCase):

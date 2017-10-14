@@ -23,6 +23,9 @@ class DraughtsAPI:
         self.playDraughts = self.WHITE_DRAUGHT
         self.AI = False
 
+        self.lastFirstStep=(-1, -1)
+        self.lastSecondStep=(-1, -1)
+
         self.gameField = []
 
         self.stepArray = HistoryArray(5)
@@ -79,10 +82,7 @@ class DraughtsAPI:
         :param var: строка полученная функцией save_game
         :return: False or True
         """
-        if var == "True":
-            return True
-        else:
-            return False
+        return var == "True"
 
     def load_game(self, parse_game):
         """
@@ -121,6 +121,10 @@ class DraughtsAPI:
             i, j = self.check_draughts(mp)
             self.game_logic(i, j)
 
+    def set_last_step(self,i,j):
+        self.lastFirstStep=(self.iFirstActivePosition, self.jFirstActivePosition)
+        self.lastSecondStep=(i,j)
+
     def game_logic(self, i, j):
         """
         обработка всех игровых событий
@@ -141,6 +145,7 @@ class DraughtsAPI:
 
             if self.continueStep and self.king_or_not_king() and self.correct_hod_for_king(i, j):
                 self.step_with_enemy_for_king(i, j)
+                self.set_last_step(i,j)
                 if len(self.check_chess_with_enemy()) == 0:
                     self.change_godraught()
                     self.continueStep = False
@@ -150,6 +155,7 @@ class DraughtsAPI:
 
             if self.continueStep and (i, j) in self.correct_step_with_enemy(i, j):
                 self.step_with_enemy(i, j)
+                self.set_last_step(i, j)
                 if i == 0 or i == 9:
                     if self.king_check_after_enemy(i, j):
                         self.set_king(i, j)
@@ -169,11 +175,13 @@ class DraughtsAPI:
 
         elif self.continueStep and self.king_or_not_king():
             self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
+            self.set_last_step(i, j)
             self.continueStep = False
             self.change_godraught()
 
         elif self.continueStep and self.normal_step_rule(self.iFirstActivePosition, self.jFirstActivePosition, i, j):
             self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
+            self.set_last_step(i, j)
             if self.king_check_without_enemy(i):
                 self.set_king(i, j)
             self.continueStep = False
