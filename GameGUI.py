@@ -3,6 +3,7 @@ from PauseMenu import PauseMenu
 
 
 class GameGUI:
+
     def __init__(self, game_logic):
         pygame.font.init()
 
@@ -99,8 +100,26 @@ class GameGUI:
             self.rightscreen.blit(label_two, (100, 370 + (n - i) * 35))
 
     def render_last_step(self):
-        for step in [self.logic.lastFirstStep, self.logic.lastSecondStep]:
-            self.mainscreen.blit(self.i_last_step, (step[1] * self.lengthOrWidth, step[0] * self.lengthOrWidth))
+        try:
+            length = len(self.logic.stepArray)-1
+            step_first = self.logic.stepArray.get_first(length)
+            step_second = self.logic.stepArray.get_second(length)
+
+            self.mainscreen.blit(self.i_last_step, ((step_first[1]-1) * self.lengthOrWidth, (step_first[0]-1) * self.lengthOrWidth))
+            self.mainscreen.blit(self.i_last_step, ((step_second[1]-1) * self.lengthOrWidth, (step_second[0]-1) * self.lengthOrWidth))
+            for i in range(1,4):
+                step_f = self.logic.stepArray.get_first(length-i)
+                if self.logic.stepArray.get_color(length-i) == self.logic.stepArray.get_color(length-i+1):
+                    self.mainscreen.blit(self.i_last_step, (
+                    (step_f[1] - 1) * self.lengthOrWidth, (step_f[0] - 1) * self.lengthOrWidth))
+                else:
+                    break
+
+        except: None
+
+    def render_success_step(self):
+        for step in self.logic.check_chess_with_enemy():
+            self.mainscreen.blit(self.i_access_step, (step[1] * self.lengthOrWidth, step[0] * self.lengthOrWidth))
 
     def who_go_render(self):
         """
@@ -148,6 +167,7 @@ class GameGUI:
         self.who_go_render()
         self.step_history()
         self.render_last_step()
+        self.render_success_step()
         self.render_game_field()
 
 

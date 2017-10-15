@@ -23,8 +23,7 @@ class DraughtsAPI:
         self.playDraughts = self.WHITE_DRAUGHT
         self.AI = False
 
-        self.lastFirstStep=(-1, -1)
-        self.lastSecondStep=(-1, -1)
+        self.successSteps = []
 
         self.gameField = []
 
@@ -111,7 +110,7 @@ class DraughtsAPI:
         Распределяет на игру с ии и без
         :param mp: координаты мышки
         """
-
+        self.successSteps = self.check_chess_with_enemy()
         if self.AI and self.playDraughts != self.playerDraughts:
             for i in range(10):
                 if self.playDraughts != self.playerDraughts:
@@ -120,10 +119,6 @@ class DraughtsAPI:
         else:
             i, j = self.check_draughts(mp)
             self.game_logic(i, j)
-
-    def set_last_step(self,i,j):
-        self.lastFirstStep=(self.iFirstActivePosition, self.jFirstActivePosition)
-        self.lastSecondStep=(i,j)
 
     def game_logic(self, i, j):
         """
@@ -137,6 +132,7 @@ class DraughtsAPI:
 
         draughts_with_enemy = self.check_chess_with_enemy()
         if len(draughts_with_enemy) != 0:
+
             if (i, j) in draughts_with_enemy:
                 self.iFirstActivePosition = i
                 self.jFirstActivePosition = j
@@ -145,7 +141,6 @@ class DraughtsAPI:
 
             if self.continueStep and self.king_or_not_king() and self.correct_hod_for_king(i, j):
                 self.step_with_enemy_for_king(i, j)
-                self.set_last_step(i,j)
                 if len(self.check_chess_with_enemy()) == 0:
                     self.change_godraught()
                     self.continueStep = False
@@ -155,7 +150,6 @@ class DraughtsAPI:
 
             if self.continueStep and (i, j) in self.correct_step_with_enemy(i, j):
                 self.step_with_enemy(i, j)
-                self.set_last_step(i, j)
                 if i == 0 or i == 9:
                     if self.king_check_after_enemy(i, j):
                         self.set_king(i, j)
@@ -175,13 +169,11 @@ class DraughtsAPI:
 
         elif self.continueStep and self.king_or_not_king():
             self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
-            self.set_last_step(i, j)
             self.continueStep = False
             self.change_godraught()
 
         elif self.continueStep and self.normal_step_rule(self.iFirstActivePosition, self.jFirstActivePosition, i, j):
             self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
-            self.set_last_step(i, j)
             if self.king_check_without_enemy(i):
                 self.set_king(i, j)
             self.continueStep = False
@@ -215,6 +207,8 @@ class DraughtsAPI:
         self.stepArray.put(
             ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
+        self.successSteps = []
+
 
     def correct_hod_for_king(self, i, j):
         """
@@ -272,7 +266,7 @@ class DraughtsAPI:
 
                         if self.gameField[i_first_position - a * k][
                                     j_first_position - b * k] != "." and \
-                                    self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
+                                self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
                                         self.gameField[i_first_position - a * (k + 1)][
                                                     j_first_position - b * (k + 1)] == ".":
                             enemy_array.append((i_first_position - a * k, j_first_position - b * k))
@@ -372,6 +366,8 @@ class DraughtsAPI:
         self.stepArray.put(
             ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
+        self.successSteps = []
+
 
     def correct_step_with_enemy(self, i, j):
         """
@@ -557,6 +553,7 @@ class DraughtsAPI:
         :param i: куда ходит 1
         :param j: куда ходит 2
         """
+        self.successSteps = []
         self.gameField[i][j] = self.gameField[i_first_position][j_first_position]
         self.gameField[i_first_position][j_first_position] = '.'
         self.stepArray.put(
@@ -618,6 +615,7 @@ class DraughtsAPI:
         """
         изменяет цвет шашек которыми нужно ходить
         """
+
         if self.playDraughts == 'w':
             self.playDraughts = 'b'
         else:
