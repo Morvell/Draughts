@@ -1,5 +1,5 @@
 import endMenu
-from Hahkiapi import DraughtsAPI
+from DraughtsAPI import DraughtsAPI
 from MainMenu import MainMenu
 from GameGUI import GameGUI
 

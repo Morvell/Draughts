@@ -23,6 +23,8 @@ class DraughtsAPI:
         self.playDraughts = self.WHITE_DRAUGHT
         self.AI = False
 
+        self.successSteps = []
+
         self.gameField = []
 
         self.stepArray = HistoryArray(5)
@@ -79,10 +81,7 @@ class DraughtsAPI:
         :param var: строка полученная функцией save_game
         :return: False or True
         """
-        if var == "True":
-            return True
-        else:
-            return False
+        return var == "True"
 
     def load_game(self, parse_game):
         """
@@ -111,7 +110,7 @@ class DraughtsAPI:
         Распределяет на игру с ии и без
         :param mp: координаты мышки
         """
-
+        self.successSteps = self.check_chess_with_enemy()
         if self.AI and self.playDraughts != self.playerDraughts:
             for i in range(10):
                 if self.playDraughts != self.playerDraughts:
@@ -133,6 +132,7 @@ class DraughtsAPI:
 
         draughts_with_enemy = self.check_chess_with_enemy()
         if len(draughts_with_enemy) != 0:
+
             if (i, j) in draughts_with_enemy:
                 self.iFirstActivePosition = i
                 self.jFirstActivePosition = j
@@ -207,6 +207,8 @@ class DraughtsAPI:
         self.stepArray.put(
             ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
+        self.successSteps = []
+
 
     def correct_hod_for_king(self, i, j):
         """
@@ -264,7 +266,7 @@ class DraughtsAPI:
 
                         if self.gameField[i_first_position - a * k][
                                     j_first_position - b * k] != "." and \
-                                    self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
+                                self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
                                         self.gameField[i_first_position - a * (k + 1)][
                                                     j_first_position - b * (k + 1)] == ".":
                             enemy_array.append((i_first_position - a * k, j_first_position - b * k))
@@ -364,6 +366,8 @@ class DraughtsAPI:
         self.stepArray.put(
             ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
+        self.successSteps = []
+
 
     def correct_step_with_enemy(self, i, j):
         """
@@ -549,6 +553,7 @@ class DraughtsAPI:
         :param i: куда ходит 1
         :param j: куда ходит 2
         """
+        self.successSteps = []
         self.gameField[i][j] = self.gameField[i_first_position][j_first_position]
         self.gameField[i_first_position][j_first_position] = '.'
         self.stepArray.put(
@@ -610,6 +615,7 @@ class DraughtsAPI:
         """
         изменяет цвет шашек которыми нужно ходить
         """
+
         if self.playDraughts == 'w':
             self.playDraughts = 'b'
         else:

@@ -18,6 +18,9 @@ class HistoryArray:
         if len(self.array) > self.n:
             self.array.pop(0)
 
+    def get_last(self):
+        return self.array[len(self.array)-1]
+
     def get_first(self, n):
         return self.array[n][0]
 
