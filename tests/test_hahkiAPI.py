@@ -6,12 +6,6 @@ from DraughtsAPI import DraughtsAPI
 class TestHahkiAPI(TestCase):
     game = DraughtsAPI()
 
-    def test_without_net(self):
-        None
-
-    def test_gameLogic(self):
-        None
-
     def test_hodWithEnemyForDamka(self):
         self.game.iFirstActivePosition = 0
         self.game.jFirstActivePosition = 9
@@ -114,8 +108,8 @@ class TestHahkiAPI(TestCase):
 
         self.assertTrue(self.game.correct_hod_for_king(2, 5))
 
-        self.game.iFirstActivePosition = 4
-        self.game.jFirstActivePosition = 3
+        self.game.iFirstActivePosition = 3
+        self.game.jFirstActivePosition = 4
 
         self.game.gameField = [
             list(' . . . . .'),
@@ -131,9 +125,6 @@ class TestHahkiAPI(TestCase):
         ]
 
         self.assertTrue(self.game.correct_hod_for_king(0, 7))
-
-    def test_checkEnemyForDamka(self):
-        None
 
     def test_ruleOne(self):
         self.game.playDraughts = "w"
@@ -329,8 +320,6 @@ class TestHahkiAPI(TestCase):
         self.assertTrue(self.game.gameField[7][2] == '.')
         self.assertTrue(self.game.gameField[8][1] == '.')
 
-    def test_accessHodWithEnemy(self):
-        None
 
     def test_checkEnemy(self):
         self.game.gameField = [
@@ -347,7 +336,8 @@ class TestHahkiAPI(TestCase):
         ]
 
         self.assertEqual(self.game.check_enemy(0, 7), [(1, 6)])
-        self.assertEqual(self.game.check_enemy(6, 3), [(5, 2), (5, 4)])
+        self.assertEqual(self.game.check_enemy(5,4), [(6,3)])
+
 
     def test_checkChessWithEnemy(self):
         self.game.playDraughts = "b"
@@ -398,8 +388,6 @@ class TestHahkiAPI(TestCase):
         self.game.change_number_of_live_draughts()
         self.assertEqual(self.game.numberOfWhite, 19)
 
-    def test_endGame(self):
-        None
 
     def test_how_kill(self):
         self.game.playDraughts = "w"
@@ -423,12 +411,6 @@ class TestHahkiAPI(TestCase):
         self.game.simple_step(0, 1, 1, 2)
         self.assertEqual(self.game.gameField[0][1], '.')
         self.assertEqual(self.game.gameField[1][2], 'b')
-
-    def test_checkchess(self):
-        None
-
-    def test_startpos(self):
-        None
 
     def test_changeGoChess(self):
         self.game.playDraughts = 'w'

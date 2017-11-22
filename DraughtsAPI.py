@@ -138,7 +138,8 @@ class DraughtsAPI:
         if len(draughts_with_enemy) != 0:
 
             if (i, j) in draughts_with_enemy:
-                if self.AI and self.continueStep and len(draughts_with_enemy)>1:
+                if self.AI and self.continueStep and len(
+                        draughts_with_enemy) > 1:
                     return
                 self.iFirstActivePosition = i
                 self.jFirstActivePosition = j
@@ -147,7 +148,7 @@ class DraughtsAPI:
 
             if self.continueStep and self.is_king() and self.correct_hod_for_king(i, j):
                 self.step_with_enemy_for_king(i, j)
-                if len(self.check_enemy_for_king(i,j)) == 0:
+                if len(self.check_enemy_for_king(i, j)) == 0:
                     self.change_godraught()
                     self.continueStep = False
                     return
@@ -159,7 +160,7 @@ class DraughtsAPI:
                 if i == 0 or i == 9:
                     if self.king_check_after_enemy(i, j):
                         self.set_king(i, j)
-                if len(self.check_enemy(i,j)) == 0:
+                if len(self.check_enemy(i, j)) == 0:
                     self.change_godraught()
                     self.continueStep = False
                     return
@@ -168,23 +169,47 @@ class DraughtsAPI:
             else:
                 return
 
-        if self.friend_or_not(i, j) and self.draughts_with_normal_step(i,j):
+        if self.friend_or_not(i, j) and self.draughts_with_normal_step(i, j):
 
             self.iFirstActivePosition = i
             self.jFirstActivePosition = j
             self.continueStep = True
 
-        elif self.continueStep and self.is_king():
-            self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
+        elif self.continueStep and self.is_king() and self.check_correct_step_for_king(i, j):
+            self.simple_step(self.iFirstActivePosition,
+                             self.jFirstActivePosition, i, j)
             self.continueStep = False
             self.change_godraught()
 
-        elif self.continueStep and self.normal_step_rule(self.iFirstActivePosition, self.jFirstActivePosition, i, j):
-            self.simple_step(self.iFirstActivePosition, self.jFirstActivePosition, i, j)
+        elif self.continueStep and self.normal_step_rule(
+                self.iFirstActivePosition, self.jFirstActivePosition, i, j) and not self.is_king():
+            self.simple_step(self.iFirstActivePosition,
+                             self.jFirstActivePosition, i, j)
             if self.king_check_without_enemy(i):
                 self.set_king(i, j)
             self.continueStep = False
             self.change_godraught()
+
+    def check_correct_step_for_king(self, i, j):
+        diagonal = []
+        delete_direction = []
+        for k in range(1, 9):
+            for a in (1, -1):
+                for b in (1, -1):
+                    if self.iFirstActivePosition - a * k > 0 and self.jFirstActivePosition - b * k > 0 and self.iFirstActivePosition - a * k < 9 \
+                            and self.jFirstActivePosition - b * k < 9:
+                        if self.friend_or_not(self.iFirstActivePosition - a * k,
+                                              self.jFirstActivePosition - b * k):
+                            delete_direction.append((a, b))
+                            continue
+
+                        if (a, b) in delete_direction:
+                            continue
+
+                        diagonal.append((self.iFirstActivePosition - a * k,
+                                            self.jFirstActivePosition - b * k))
+
+        return (i,j) in diagonal
 
     def step_with_enemy_for_king(self, i, j):
         """
@@ -195,7 +220,7 @@ class DraughtsAPI:
         self.i_enemy_position = 0
         self.j_enemy_position = 0
 
-        self.lastGameDraught=(i,j)
+        self.lastGameDraught = (i, j)
 
         if i - self.iFirstActivePosition < 0:
             self.i_enemy_position = i + 1
@@ -210,13 +235,19 @@ class DraughtsAPI:
             else:
                 self.j_enemy_position = j + 1
 
-        self.gameField[i][j] = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
-        self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] = self.GAME_PIECE
-        self.gameField[self.i_enemy_position][self.j_enemy_position] = self.GAME_PIECE
+        self.gameField[i][j] = self.gameField[self.iFirstActivePosition][
+            self.jFirstActivePosition]
+        self.gameField[self.iFirstActivePosition][
+            self.jFirstActivePosition] = self.GAME_PIECE
+        self.gameField[self.i_enemy_position][
+            self.j_enemy_position] = self.GAME_PIECE
         self.stepArray.put(
-            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1),
+             (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
         self.successSteps = []
+        self.iFirstActivePosition = i
+        self.jFirstActivePosition = j
 
     def correct_hod_for_king(self, i, j):
         """
@@ -225,9 +256,15 @@ class DraughtsAPI:
         :param j: вторая позиция выбранной шашки
         :return: True or False
         """
-        mass = self.check_enemy_for_king(self.iFirstActivePosition, self.jFirstActivePosition)
+        mass = self.check_enemy_for_king(self.iFirstActivePosition,
+                                         self.jFirstActivePosition)
         self.i_enemy_position = 0
         self.j_enemy_position = 0
+
+
+
+        if (i == self.iFirstActivePosition or j == self.jFirstActivePosition):
+            return False
 
         if i - self.iFirstActivePosition < 0:
             self.i_enemy_position = i + 1
@@ -237,10 +274,14 @@ class DraughtsAPI:
                 self.j_enemy_position = j - 1
         else:
             self.i_enemy_position = i - 1
+            if j - self.jFirstActivePosition == 0:
+                return False
             if j - self.jFirstActivePosition > 0:
+
                 self.j_enemy_position = j - 1
             else:
                 self.j_enemy_position = j + 1
+
 
         if (self.i_enemy_position, self.j_enemy_position) in mass:
             return True
@@ -252,7 +293,8 @@ class DraughtsAPI:
         Проверка на короля
         :return: True or False
         """
-        cur = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
+        cur = self.gameField[self.iFirstActivePosition][
+            self.jFirstActivePosition]
         return cur == self.WHITE_KING or cur == self.BLACK_KING
 
     def check_enemy_for_king(self, i, j):
@@ -266,24 +308,45 @@ class DraughtsAPI:
         j_first_position = j
         enemy_array = []
         delete_direction = []
-        for k in range(1,9):
+        for k in range(1, 9):
             for a in (1, -1):
                 for b in (1, -1):
                     if (a, b) in delete_direction:
                         continue
-                    print('[' + str(i_first_position - a * k) + "][" + str(j_first_position - b * k) + "]")
                     if i_first_position - a * k > 0 and j_first_position - b * k > 0 and i_first_position - a * k < 9 \
                             and j_first_position - b * k < 9:
+                        try:
+                            if self.friend_or_not(i_first_position - a * k,j_first_position - b * k):
+                                delete_direction.append((a, b))
+                                continue
 
-                        if self.gameField[i_first_position - a * k][
-                                    j_first_position - b * k] != "." and \
-                                self.enemy_or_not(i_first_position - a * k, j_first_position - b * k) and \
-                                (self.gameField[i_first_position - a * (k + 1)][
-                                         j_first_position - b * (k + 1)] == "."
-                                 ):
-                            enemy_array.append((i_first_position - a * k, j_first_position - b * k))
-                            delete_direction.append((a, b))
+                            if self.gameField[i_first_position - a * k][
+                                        j_first_position - b * k] != ".":
 
+                                if (self.gameField[
+                                                 i_first_position - a * (k + 1)][
+                                                 j_first_position - b * (
+                                                 k + 1)] != "."):
+
+
+                                    delete_direction.append((a, b))
+                                    continue
+
+                                if self.enemy_or_not(i_first_position - a * k,
+                                                     j_first_position - b * k) and \
+                                        (self.gameField[
+                                                 i_first_position - a * (k + 1)][
+                                                 j_first_position - b * (
+                                                 k + 1)] == "."
+                                         ):
+                                    enemy_array.append((i_first_position - a * k,
+                                                        j_first_position - b * k))
+                                    delete_direction.append((a, b))
+                        except:
+                            continue
+
+                        else:
+                            continue
         return enemy_array
 
     def enemy_or_not(self, i, j):
@@ -374,13 +437,18 @@ class DraughtsAPI:
             else:
                 self.j_enemy_position = j + 1
 
-        self.gameField[i][j] = self.gameField[self.iFirstActivePosition][self.jFirstActivePosition]
-        self.gameField[self.iFirstActivePosition][self.jFirstActivePosition] = '.'
+        self.gameField[i][j] = self.gameField[self.iFirstActivePosition][
+            self.jFirstActivePosition]
+        self.gameField[self.iFirstActivePosition][
+            self.jFirstActivePosition] = '.'
         self.gameField[self.i_enemy_position][self.j_enemy_position] = '.'
         self.stepArray.put(
-            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1),
+             (i + 1, j + 1), self.playDraughts))
         self.change_number_of_live_draughts()
         self.successSteps = []
+        self.iFirstActivePosition = i
+        self.jFirstActivePosition = j
 
     def correct_step_with_enemy(self, i, j):
         """
@@ -404,18 +472,21 @@ class DraughtsAPI:
             else:
                 self.j_enemy_position = j + 1
 
-        if not self.out_of_range(self.i_enemy_position, self.j_enemy_position) or \
-                        self.gameField[self.i_enemy_position][self.j_enemy_position] == self.playDraughts:
+        if not self.out_of_range(self.i_enemy_position,
+                                 self.j_enemy_position) or self.friend_or_not(self.i_enemy_position,self.j_enemy_position):
+
             return []
         if self.out_of_range(self.i_enemy_position, self.j_enemy_position) and \
-                        self.gameField[self.i_enemy_position][self.j_enemy_position] == ".":
+                        self.gameField[self.i_enemy_position][
+                            self.j_enemy_position] == ".":
             return []
         for a in (2, -2):
             for b in (2, -2):
                 try:
                     if self.gameField[self.iFirstActivePosition - a][
                                 self.jFirstActivePosition - b] != self.playDraughts:
-                        enemy_array.append((self.iFirstActivePosition - a, self.jFirstActivePosition - b))
+                        enemy_array.append((self.iFirstActivePosition - a,
+                                            self.jFirstActivePosition - b))
                 except Exception:
                     continue
 
@@ -448,8 +519,9 @@ class DraughtsAPI:
                                             j - b * 2 < 0 or j - b * 2 > 9:
                         continue
                     if self.gameField[i - a][j - b] != '.' and \
-                                    self.enemy_or_not(i - a, j - b) and \
-                                    self.gameField[i - a * 2][j - b * 2] == '.':
+                            self.enemy_or_not(i - a, j - b) and \
+                                    self.gameField[i - a * 2][
+                                                j - b * 2] == '.':
                         enemy_array.append((i - a, j - b))
                 except Exception:
                     continue
@@ -462,7 +534,6 @@ class DraughtsAPI:
         :return: массив шашек с врагами
         """
         enemy_array = []
-
 
         for i in range(10):
             for j in range(10):
@@ -522,13 +593,13 @@ class DraughtsAPI:
         else:
             return False
 
-    def draughts_with_normal_step(self,i,j):
+    def draughts_with_normal_step(self, i, j):
         for a in (1, -1):
             for b in (1, -1):
-                    if i - a < 0 or i - a > 9 or j - b < 0 or j - b > 9:
-                        continue
-                    if self.gameField[i - a][j - b] == '.':
-                        return True
+                if i - a < 0 or i - a > 9 or j - b < 0 or j - b > 9:
+                    continue
+                if self.gameField[i - a][j - b] == '.':
+                    return True
         return False
 
     def change_number_of_live_draughts(self):
@@ -579,10 +650,12 @@ class DraughtsAPI:
         :param j: куда ходит 2
         """
         self.successSteps = []
-        self.gameField[i][j] = self.gameField[i_first_position][j_first_position]
+        self.gameField[i][j] = self.gameField[i_first_position][
+            j_first_position]
         self.gameField[i_first_position][j_first_position] = '.'
         self.stepArray.put(
-            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1), (i + 1, j + 1), self.playDraughts))
+            ((self.iFirstActivePosition + 1, self.jFirstActivePosition + 1),
+             (i + 1, j + 1), self.playDraughts))
 
     def check_draughts(self, mp):
         """
@@ -622,16 +695,16 @@ class DraughtsAPI:
 
         elif side == 'up':
             self.gameField = [
-                list(' q . . . .'),
-                list('. . . . . '),
-                list(' . . v . .'),
+                list(' . . . . .'),
+                list('v . . q . '),
+                list(' . . . . q'),
                 list('. . . . . '),
                 list(' . . . . .'),
                 list('. . . . . '),
-                list(' . . . . .'),
-                list('. . . . . '),
-                list(' . . . . .'),
-                list('. . . . . '),
+                list(' . . . . v'),
+                list('. . . v . '),
+                list(' . . v . v'),
+                list('q . . v v '),
             ]
 
     def change_godraught(self):
