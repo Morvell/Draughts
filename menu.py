@@ -32,7 +32,8 @@ class Menu:
 
     def collaide_punkt(self, mp):
         for i in self.punkts:
-            if mp[0] > i[0] and mp[0] < (i[0] + 155) and mp[1] > i[1] and mp[1] < (i[1] + 50):
+            if mp[0] > i[0] and mp[0] < (i[0] + 155) and\
+                            mp[1] > i[1] and mp[1] < (i[1] + 50):
                 self.punkt = i[5]
 
     def done_with_punkt(self):

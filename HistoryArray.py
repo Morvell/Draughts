@@ -11,7 +11,8 @@ class HistoryArray:
             if i == "":
                 continue
             r = i.split("!")
-            self.array.append(((int(r[0][1]), int(r[0][4])), (int(r[1][1]), int(r[1][4])), r[2]))
+            self.array.append(((int(r[0][1]), int(r[0][4])),
+                               (int(r[1][1]), int(r[1][4])), r[2]))
 
     def put(self, a):
         self.array.append(a)
@@ -39,5 +40,7 @@ class HistoryArray:
     def __str__(self):
         string = str(self.n) + '@'
         for i in range(len(self.array)):
-            string += str(self.get_first(i)) + "!" + str(self.get_second(i)) + "!" + str(self.get_color(i)) + "+"
+            string += str(self.get_first(i)) + "!" +\
+                      str(self.get_second(i)) + "!" +\
+                      str(self.get_color(i)) + "+"
         return string
