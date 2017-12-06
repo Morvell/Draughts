@@ -1,7 +1,7 @@
 import endMenu
 from DraughtsAPI import DraughtsAPI
-from MainMenu import MainMenu
 from GameGUI import GameGUI
+from MainMenu import MainMenu
 
 
 def new_game(punkts):

@@ -1,9 +1,9 @@
 import pygame
+
 from PauseMenu import PauseMenu
 
 
 class GameGUI:
-
     def __init__(self, game_logic):
         pygame.font.init()
 
@@ -54,9 +54,12 @@ class GameGUI:
 
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
-                    punkts = [(365, 200, u'Continue', (123, 15, 34), (235, 75, 156), 0),
-                              (400, 300, u'Save', (123, 15, 34), (235, 75, 156), 1),
-                              (400, 400, u'Exit', (123, 15, 34), (235, 75, 156), 2)]
+                    punkts = [(365, 200, u'Continue',
+                               (123, 15, 34), (235, 75, 156), 0),
+                              (400, 300, u'Save', (123, 15, 34),
+                               (235, 75, 156), 1),
+                              (400, 400, u'Exit', (123, 15, 34),
+                               (235, 75, 156), 2)]
                     pause = PauseMenu(punkts, self.logic.save_game)
                     pause.run()
 
@@ -81,8 +84,10 @@ class GameGUI:
         """
         Отображает количество шашек на поле
         """
-        label_white = self.font.render(str(self.logic.numberOfWhite), 1, (255, 255, 255))
-        label_black = self.font.render(str(self.logic.numberOfBlack), 1, (0, 0, 0))
+        label_white = self.font.render(str(self.logic.numberOfWhite), 1,
+                                       (255, 255, 255))
+        label_black = self.font.render(str(self.logic.numberOfBlack), 1,
+                                       (0, 0, 0))
         self.rightscreen.blit(label_white, (70, 20))
         self.rightscreen.blit(label_black, (70, 120))
 
@@ -90,40 +95,55 @@ class GameGUI:
         n = len(self.logic.stepArray)
         for i in range(n):
             if self.logic.stepArray.get_color(i) == 'b':
-                label_one = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (0, 0, 0))
-                label_two = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (0, 0, 0))
+                for_label_one = str(self.logic.stepArray.get_first(i))
+                for_label_two = str(self.logic.stepArray.get_second(i))
+                label_one = self.fontLittle.render(for_label_one, 1, (0, 0, 0))
+                label_two = self.fontLittle.render(for_label_two, 1, (0, 0, 0))
             else:
-                label_one = self.fontLittle.render(str(self.logic.stepArray.get_first(i)), 1, (188, 22, 22))
-                label_two = self.fontLittle.render(str(self.logic.stepArray.get_second(i)), 1, (188, 22, 22))
+                for_label_one = str(self.logic.stepArray.get_first(i))
+                for_label_two = str(self.logic.stepArray.get_second(i))
+                label_one = self.fontLittle.render(for_label_one, 1,
+                                                   (188, 22, 22))
+                label_two = self.fontLittle.render(for_label_two, 1,
+                                                   (188, 22, 22))
 
             self.rightscreen.blit(label_one, (5, 370 + (n - i) * 35))
             self.rightscreen.blit(label_two, (100, 370 + (n - i) * 35))
 
     def render_last_step(self):
         try:
-            length = len(self.logic.stepArray)-1
+            length = len(self.logic.stepArray) - 1
             step_first = self.logic.stepArray.get_first(length)
             step_second = self.logic.stepArray.get_second(length)
 
-            self.mainscreen.blit(self.i_last_step, ((step_first[1]-1) * self.lengthOrWidth, (step_first[0]-1) * self.lengthOrWidth))
-            self.mainscreen.blit(self.i_last_step, ((step_second[1]-1) * self.lengthOrWidth, (step_second[0]-1) * self.lengthOrWidth))
-            for i in range(1,4):
-                step_f = self.logic.stepArray.get_first(length-i)
-                if self.logic.stepArray.get_color(length-i) == self.logic.stepArray.get_color(length-i+1):
+            exp_one = (step_first[1] - 1) * self.lengthOrWidth
+            exp_two = (step_first[0] - 1) * self.lengthOrWidth
+            self.mainscreen.blit(self.i_last_step, (exp_one, exp_two))
+            exp_one = (step_second[1] - 1) * self.lengthOrWidth
+            exp_two = (step_second[0] - 1) * self.lengthOrWidth
+            self.mainscreen.blit(self.i_last_step, (exp_one, exp_two))
+            for i in range(1, 4):
+                step_f = self.logic.stepArray.get_first(length - i)
+                if self.logic.stepArray.get_color(length - i) == \
+                        self.logic.stepArray.get_color(length - i + 1):
                     self.mainscreen.blit(self.i_last_step, (
-                    (step_f[1] - 1) * self.lengthOrWidth, (step_f[0] - 1) * self.lengthOrWidth))
+                        (step_f[1] - 1) * self.lengthOrWidth,
+                        (step_f[0] - 1) * self.lengthOrWidth))
                 else:
                     break
 
-        except: None
+        except:
+            None
 
     def render_success_step(self):
         for step in self.logic.check_chess_with_enemy():
-            self.mainscreen.blit(self.i_access_step, (step[1] * self.lengthOrWidth, step[0] * self.lengthOrWidth))
+            self.mainscreen.blit(self.i_access_step,
+                                 (step[1] * self.lengthOrWidth,
+                                  step[0] * self.lengthOrWidth))
 
     def who_go_render(self):
         """
-        Отображает кто должен ходить 
+        Отображает кто должен ходить
         """
         if self.logic.playDraughts == "w":
             self.rightscreen.blit(self.labelWhiteChess, (25, 300))
@@ -132,20 +152,24 @@ class GameGUI:
 
     def render_game_field(self):
         """
-        отрисовывает игровое поле 
+        отрисовывает игровое поле
         """
         for i in range(10):
             for j in range(10):
                 try:
                     if self.logic.gameField[i][j] == 'b':
-                        self.mainscreen.blit(self.i_hb, (j * self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_hb, (
+                            j * self.lengthOrWidth, i * self.lengthOrWidth))
                     elif self.logic.gameField[i][j] == 'w':
-                        self.mainscreen.blit(self.i_hw, (j * self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_hw, (
+                            j * self.lengthOrWidth, i * self.lengthOrWidth))
 
                     elif self.logic.gameField[i][j] == 'q':
-                        self.mainscreen.blit(self.i_dw, (j * self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_dw, (
+                            j * self.lengthOrWidth, i * self.lengthOrWidth))
                     elif self.logic.gameField[i][j] == 'v':
-                        self.mainscreen.blit(self.i_db, (j * self.lengthOrWidth, i * self.lengthOrWidth))
+                        self.mainscreen.blit(self.i_db, (
+                            j * self.lengthOrWidth, i * self.lengthOrWidth))
 
                     self.logic.gameField[i][j].render(self.mainscreen)
                 except AttributeError:
@@ -169,6 +193,5 @@ class GameGUI:
         self.render_last_step()
         self.render_success_step()
         self.render_game_field()
-
 
         pygame.display.flip()

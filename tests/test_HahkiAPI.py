@@ -1,11 +1,16 @@
+import os
+import sys
 import unittest
 from unittest import TestCase
 
-import DraughtsAPI as dAPI
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
+
+from DraughtsAPI import DraughtsAPI
 
 
 class TestHahkiAPI(TestCase):
-    game = dAPI.DraughtsAPI()
+    game = DraughtsAPI()
 
     def test_draughts_with_normal_step(self):
         self.game.gameField = [
@@ -53,6 +58,7 @@ class TestHahkiAPI(TestCase):
         self.assertEqual(self.game.check_draughts(mp), (0, 0))
 
     def test_set_start_field(self):
+        self.game.set_start_playing_field("down")
         gameField = [
             list(' b b b b b'),
             list('b b b b b '),

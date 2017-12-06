@@ -32,7 +32,9 @@ class EndMenu:
 
     def collaide_punkt(self, mp):
         for i in self.punkts:
-            if mp[0] > i[0] and mp[0] < (i[0] + 155) and mp[1] > i[1] and mp[1] < (i[1] + 50):
+            if mp[0] > i[0] \
+                    and mp[0] < (i[0] + 155) and mp[1] > i[1] \
+                    and mp[1] < (i[1] + 50):
                 self.punkt = i[5]
 
     def done_with_punkt(self):
@@ -72,7 +74,8 @@ class EndMenu:
                         if self.punkt < (len(self.punkts) - 1):
                             self.punkt += 1
                 if (e.type == pygame.MOUSEBUTTONDOWN and e.button == 1) or (
-                                e.type == pygame.KEYDOWN and e.key == pygame.K_RIGHT):
+                                e.type == pygame.KEYDOWN and
+                                e.key == pygame.K_RIGHT):
                     return self.done_with_punkt()
 
             window.blit(mainscreen, (0, 0))

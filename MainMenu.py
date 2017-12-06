@@ -1,5 +1,6 @@
-from menu import *
 from MenuSide import MenuSide
+
+from menu import *
 
 
 class MainMenu(Menu):
