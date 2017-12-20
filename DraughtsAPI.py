@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from HistoryArray import HistoryArray
 import json
 
@@ -128,6 +130,7 @@ class DraughtsAPI:
         :param i: первый индекс массива
         :param j: второй индекс массива
         """
+
         if self.gameField[i][j] == self.NOGAME_PIECE:
             return
 
@@ -139,8 +142,8 @@ class DraughtsAPI:
         if len(draughts_with_enemy) != 0:
 
             if (i, j) in draughts_with_enemy:
-                if self.AI and self.continueStep and len(
-                        draughts_with_enemy) > 1:
+                if self.AI and self.continueStep and \
+                                len(draughts_with_enemy) > 1:
                     return
                 self.iFirstAP = i
                 self.jFirstAP = j
@@ -291,6 +294,10 @@ class DraughtsAPI:
         else:
             return False
 
+    def is_kingOnCoor(self, i, j):
+        cur = self.gameField[i][j]
+        return cur == self.WHITE_KING or cur == self.BLACK_KING
+
     def is_king(self):
         """
         Проверка на короля
@@ -299,6 +306,52 @@ class DraughtsAPI:
         cur = self.gameField[self.iFirstAP][
             self.jFirstAP]
         return cur == self.WHITE_KING or cur == self.BLACK_KING
+
+    def check_enemy_for_kingV2(self, i, j):
+        i_fp = i
+        j_fp = j
+        enemy_array = []
+        delete_direction = []
+        for k in range(1, 9):
+            for a in (1, -1):
+                for b in (1, -1):
+                    if (a, b) in delete_direction:
+                        continue
+                    if i_fp - a * k > 0 \
+                            and j_fp - b * k > 0 \
+                            and i_fp - a * k < 9 \
+                            and j_fp - b * k < 9:
+                        try:
+                            if self.is_friend(i_fp - a * k,
+                                              j_fp - b * k):
+                                delete_direction.append((a, b))
+                                continue
+
+                            if self.gameField[i_fp - a * k][
+                                        j_fp - b * k] != ".":
+
+                                if (self.gameField[
+                                            i_fp - a * (k + 1)][
+                                            j_fp - b * (
+                                                    k + 1)] != "."):
+                                    delete_direction.append((a, b))
+                                    continue
+
+                                if self.enemy_or_not(i_fp - a * k,
+                                                     j_fp - b * k) \
+                                        and (self.gameField[i_fp - a * (k + 1)][j_fp - b * (k + 1)] == "."):
+                                    enemy_array.append(
+                                        ((i_fp - a * k,
+                                          j_fp - b * k),
+                                         ((i_fp - a * (k + 1)),
+                                          (j_fp - b * (k + 1)))))
+                                    delete_direction.append((a, b))
+                        except:
+                            continue
+
+                        else:
+                            continue
+        return enemy_array
 
     def check_enemy_for_king(self, i, j):
         """
@@ -339,7 +392,7 @@ class DraughtsAPI:
                                 if self.enemy_or_not(i_fp - a * k,
                                                      j_fp - b * k) \
                                         and (self.gameField[i_fp - a * (
-                                                        k + 1)][
+                                                    k + 1)][
                                                      j_fp - b * (
                                                              k + 1)] == "."
                                              ):
@@ -508,6 +561,28 @@ class DraughtsAPI:
             return False
         return True
 
+    def check_enemyV2(self, i, j):
+
+        enemy_array = []
+
+        for a in (1, -1):
+            for b in (1, -1):
+                try:
+                    if i - a < 0 or i - a > 9 \
+                            or j - b < 0 or j - b > 9 \
+                            or i - a * 2 < 0 or i - a * 2 > 9 \
+                            or j - b * 2 < 0 or j - b * 2 > 9:
+                        continue
+                    if self.gameField[i - a][j - b] != '.' and \
+                            self.enemy_or_not(i - a, j - b) \
+                            and self.gameField[i - a * 2][j - b * 2] == '.':
+                        enemy_array.append(
+                            ((i - a, j - b), (i - a * 2, j - b * 2)))
+                except Exception:
+                    continue
+
+        return enemy_array
+
     def check_enemy(self, i, j):
         """
         находит всех врагов
@@ -534,33 +609,110 @@ class DraughtsAPI:
 
         return enemy_array
 
+    def check_enemy_length(self, i, j, leng=0):
+        newarr = deepcopy(self.gameField)
+        length = leng
+        arrlen=[]
+        if self.is_kingOnCoor(i, j):
+
+            arr = self.check_enemy_for_kingV2(i, j)
+            if (len(arr) != 0):
+                for a in arr:
+                    self.gameField[a[1][0]][a[1][1]] = self.gameField[a[0][0]][
+                        a[0][1]]
+                    self.gameField[a[1][0]][a[1][1]] = self.gameField[a[0][0]][
+                        a[0][1]]
+                    b = self.check_enemy_length(a[1][0], a[1][1], length + 1)
+                    if b != 0:
+                        for k in b:
+                            k.append((a[1][0],a[1][1]))
+                            arrlen.append(k)
+                    else:
+                        arrlen.append([length,(i, j)])
+
+                self.gameField = newarr
+                return self.max(arrlen)
+            else:
+                arrlen.append([length, (i, j)])
+                self.gameField = newarr
+                return self.max(arrlen)
+
+        elif not self.is_kingOnCoor(i, j):
+            arr = self.check_enemyV2(i, j)
+            if (len(arr) != 0):
+                for a in arr:
+                    self.gameField[a[1][0]][a[1][1]] = self.gameField[a[0][0]][
+                        a[0][1]]
+                    self.gameField[a[1][0]][a[1][1]] = self.gameField[a[0][0]][
+                        a[0][1]]
+                    b = self.check_enemy_length(a[1][0], a[1][1], length + 1)
+                    if b != 0:
+                        for k in b:
+                            k.append((a[1][0],a[1][1]))
+                            arrlen.append(k)
+                    else:
+                        arrlen.append([length,(i, j)])
+
+                self.gameField = newarr
+                return self.max(arrlen)
+            else:
+                arrlen.append([length, (i, j)])
+                self.gameField = newarr
+                return self.max(arrlen)
+
+        else:
+            return 0
+
+    def max(self,arr):
+        maximum=(0,0)
+        for a in arr:
+            if a[0]>=maximum[0]:
+                maximum=a
+            else:
+                arr.remove(a)
+        for a in arr:
+            if a[0]>=maximum[0]:
+                maximum=a
+            else:
+                arr.remove(a)
+        return arr
+
     def check_chess_with_enemy(self):
         """
         нахождение всех шашек с врагами
         :return: массив шашек с врагами
         """
         enemy_array = []
+        enemy_array_end = []
 
         for i in range(10):
             for j in range(10):
                 if self.playDraughts == "w" and self.gameField[i][j] == "q":
                     if len(self.check_enemy_for_king(i, j)) != 0:
-                        enemy_array.append((i, j))
+                        a = self.check_enemy_length(i, j)
+                        enemy_array.append((a[0][0],(i, j)))
                         continue
                 elif self.playDraughts == "b" and self.gameField[i][j] == "v":
                     if len(self.check_enemy_for_king(i, j)) != 0:
-                        enemy_array.append((i, j))
+                        a = self.check_enemy_length(i, j)
+                        enemy_array.append((a[0][0], (i, j)))
                         continue
                 elif self.gameField[i][j] == self.playDraughts:
                     mass = self.check_enemy(i, j)
                     if len(mass) != 0:
-                        enemy_array.append((i, j))
+                        a = self.check_enemy_length(i, j)
+                        enemy_array.append((a[0][0], (i, j)))
                 else:
                     continue
-        if self.continueStep and self.lastGameDraught in enemy_array:
-            enemy_array = [self.lastGameDraught]
 
-        return enemy_array
+        for a in self.max(enemy_array):
+            enemy_array_end.append(a[1])
+
+        if self.continueStep and self.lastGameDraught in enemy_array_end:
+            enemy_array_end = [self.lastGameDraught]
+
+        print(enemy_array_end)
+        return enemy_array_end
 
     def normal_step_rule(self, i_first_position, j_first_position, i, j):
         """
@@ -673,9 +825,11 @@ class DraughtsAPI:
         for i in range(10):
             for j in range(10):
                 if (j * self.LEN_OR_WIDTH < mp[0] and
-                    mp[0] < (j * self.LEN_OR_WIDTH + self.LEN_OR_WIDTH) and
-                    i * self.LEN_OR_WIDTH < mp[1] and
-                    mp[1] < (i * self.LEN_OR_WIDTH + self.LEN_OR_WIDTH)):
+                            mp[0] < (
+                                j * self.LEN_OR_WIDTH + self.LEN_OR_WIDTH) and
+                                i * self.LEN_OR_WIDTH < mp[1] and
+                            mp[1] < (
+                                i * self.LEN_OR_WIDTH + self.LEN_OR_WIDTH)):
                     return i, j
         return 0, 0
 
@@ -688,30 +842,30 @@ class DraughtsAPI:
 
         if side == 'down':
             self.gameField = [
-                list(' b b b b b'),
-                list('b b b b b '),
-                list(' b b b b b'),
-                list('b b b b b '),
+                list(' . w . . q'),
+                list('. b b . b '),
+                list(' . . . . .'),
+                list('. . b b . '),
+                list(' . . . . .'),
+                list('. . . b . '),
                 list(' . . . . .'),
                 list('. . . . . '),
-                list(' w w w w w'),
-                list('w w w w w '),
-                list(' w w w w w'),
-                list('w w w w w '),
+                list(' . . . . .'),
+                list('. . . . . '),
             ]
 
         elif side == 'up':
             self.gameField = [
-                list(' w w w w w'),
-                list('w w w w w '),
-                list(' w w w w w'),
-                list('w w w w w '),
-                list(' . . . . .'),
+                list(' q q q q q'),
+                list('q q q q q '),
+                list(' q q q q q'),
+                list('q q q q q '),
+                list(' . . . v .'),
                 list('. . . . . '),
-                list(' b b b b b'),
-                list('b b b b b '),
-                list(' b b b b b'),
-                list('b b b b b '),
+                list(' v v v v v'),
+                list('v v . v v '),
+                list(' v v v v v'),
+                list('v v v v v '),
             ]
 
     def change_godraught(self):
