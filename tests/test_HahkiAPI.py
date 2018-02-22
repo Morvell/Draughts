@@ -561,7 +561,7 @@ class TestHahkiAPI(TestCase):
         ]
 
         self.assertEqual(self.game.check_chess_with_enemy(),
-                         [(0, 3), (0, 7), (5, 4)])
+                         [(0, 7)])
 
     def test_normalHodRule(self):
         self.game.playerDraughts = "w"
