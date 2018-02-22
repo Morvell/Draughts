@@ -2,6 +2,7 @@ import endMenu
 from DraughtsAPI import DraughtsAPI
 from GameGUI import GameGUI
 from MainMenu import MainMenu
+import time
 
 
 def new_game(punkts):
@@ -37,6 +38,8 @@ done = True
 newGame = False
 
 while done:
+
+    time.sleep(0.05)
 
     if newGame:
         game, gameGUI = new_game(punkts)
